@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
-import {iniciarCasillas} from './algorithmA.js';
-import Casilla from './Casilla.js';
-import Personaje from './Personaje.js';
+import { db } from './js/db.js';
+import { crearTabla, crearObjeto, ejecutarJuego } from './js/configMap.js';
+import { idToPos, posToId, vecinos} from './js/tabla.js';
+import DibujarMapa from './js/mapa.js';
 
-var config = {
-  'numCasillas': 30,
-  'tamCasilla': 50
-}
+  
 
-var casillas = iniciarCasillas(config.numCasillas);
+  crearTabla(db);
+  console.log('idToPos(31): '+idToPos(31));
+  console.log('posToId[5,1]: '+posToId([5,1]));
+  console.log('vecinos(31): '+vecinos(31));
 
+  //console.log('DB: '+JSON.stringify(db));
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {
-          casillas.map((casilla)=>{
-            return(
-              <Casilla casilla={casilla} config={config} key= {'Casilla'+casilla.id} />
-            )
-          })
-        }
-        <Personaje casillas={casillas} config={config}/>
+        {db.tabla.map((obj)=>{
+          return <DibujarMapa db={db} obj={obj}/>
+        })}    
       </div>
     );
   }
