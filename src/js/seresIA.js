@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
 import { db } from './db.js';
 
+
 export class DibujarSeres extends Component {
     constructor(props){
         super(props);
 
         this.state = {
+            'id': this.props.ser.id,
+            'pos': this.props.ser.pos,
             'ser': this.props.ser,
             'tam': db.config.tamCasilla,
+            'velocidad': this.props.ser.velocidad,
+            'vivido': 0
         }
+
+        setInterval(() => {
+            this.setState({
+                'vivido': this.state.vivido++
+            })
+            //db.seres[this.state.id].pos[0] += this.state.velocidad/100;
+          }, 48);
+
     }
 
+    
     render() {
         let styleSer = {
             'position': 'fixed',
@@ -25,7 +39,7 @@ export class DibujarSeres extends Component {
         }
         return (
             <div style={styleSer}>
-                <div></div>
+                <div>{this.state.id}</div>
             </div>
         )
     }
