@@ -11,5 +11,6 @@ export var db =
       'obj': {}
     }
   },
-  'tabla':[]
+  'tabla':[],
+  'seres':[]
 }

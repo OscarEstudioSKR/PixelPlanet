@@ -14,22 +14,19 @@ class DibujarMapa extends Component {
 
     render() {
         let styleCasilla = {
-            'position': 'absolute',
+            'position': 'fixed',
             'left': this.state.obj.pos[0]*this.state.tam,
             'top': this.state.obj.pos[1]*this.state.tam,
             'height': this.state.tam,
             'width': this.state.tam,
-            'background': 'white',
-            'border': '1px solid gray'
+            'background': this.state.obj.obstaculo ? 'gray' : 'white',
+            'border': '1px solid gray',
         }
+
         return (
-            this.state.tabla.map((obj)=>{
-                return(
-                    <div style={styleCasilla}>
-                        {obj.id}
-                    </div>
-                );
-            })
+            <div style={styleCasilla}>
+                <div>{this.state.obj.id}</div>
+            </div>
         )
     }
   }

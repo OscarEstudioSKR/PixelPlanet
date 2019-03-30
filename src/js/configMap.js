@@ -1,5 +1,7 @@
+import { db } from './db.js';
+import { idToPos} from './tabla.js';
 
-export function crearTabla(db){
+export function crearTabla(){
 
     let i = 0;
     for( let y = 0 ; y < db.config.numCasillas ; y++ ){
@@ -8,7 +10,7 @@ export function crearTabla(db){
             db.tabla.push({
                 'id': i,
                 'pos': [ x,y ],
-                'obstaculo': Math.random()<0.8 ? false: true,
+                'obstaculo': Math.random()<0.7 ? false: true,
                 'obj': {}
             });
             i++;
@@ -18,10 +20,13 @@ export function crearTabla(db){
     console.log('Lucy: Tabla del juego creada');
 }
 
-export function crearObjeto(db){
-    console.log('Lucy: Aun no tengo nada programado para crearObjeto()');
-}
+export function crearObjeto(idPos){
+    db.seres.push(
+        {
+            'id': db.seres.length,
+            'tipo': 'criatura',
+            'pos': idToPos(idPos)
 
-export function ejecutarJuego(db){
-    console.log('Lucy: Aun no se como ejecutar el juego');
+        }
+    )
 }
