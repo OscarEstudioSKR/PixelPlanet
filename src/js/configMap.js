@@ -26,7 +26,10 @@ export function crearObjeto(idPos){
             'id': db.seres.length,
             'tipo': 'criatura',
             'pos': idToPos(idPos),
-            'velocidad': 7,
+            'dest': idToPos(idPos),
+            'ruta': [],
+            'posIntermedia': idToPos(idPos),
+            'velocidad': 1,
         }
     )
     console.log('Lucy: Nueva criatura creada en '+idPos);
