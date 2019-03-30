@@ -38,3 +38,11 @@ export function vecinos(id){
     return arrTemp;
 }
 
+//Devuelve la distancia en casillas desde un punto a otro.
+export function distAB(origen, destino){
+    return Math.abs( (idToPos( origen )[0] - idToPos( destino )[0] ) + (idToPos( origen )[1] - idToPos( destino )[1] ) )
+}
+//Devuelve del 1 al 8, indicando la posicion en que mira 1 = arriba, 2 = arriba-derecha, 3 = derecha...
+export function direccionMirada(origen, destino){
+    return 1
+}

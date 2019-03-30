@@ -40,7 +40,7 @@ export class DibujarSeres extends Component {
                     }
                 }else{
                     //Quiere una nueva ruta
-                    ser.ruta = obtenerRuta(state.pos, state.dest);
+                    ser.ruta = obtenerRuta(ser, state.pos, state.dest);
                     ser.posIntermedia = ser.ruta[0];
                 }
             }else{
