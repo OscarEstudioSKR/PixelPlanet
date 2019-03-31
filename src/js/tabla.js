@@ -42,7 +42,24 @@ export function vecinos(id){
 export function distAB(origen, destino){
     return Math.abs( (idToPos( origen )[0] - idToPos( destino )[0] ) + (idToPos( origen )[1] - idToPos( destino )[1] ) )
 }
+
 //Devuelve del 1 al 8, indicando la posicion en que mira 1 = arriba, 2 = arriba-derecha, 3 = derecha...
-export function direccionMirada(origen, destino){
-    return 1
+export function direccionMirada(idOrigen, idDestino){
+    let resp = 0;
+    let origen = idToPos(idOrigen);
+    let destino = idToPos(idDestino);
+
+    if( idDestino < idOrigen ){
+        if (destino[1] === origen[1]){ resp = 7 }
+        else if (destino[0] > origen[0]){ resp = 2 }
+        else if (destino[0] < origen[0]){ resp = 8 }
+        else { resp = 1 }
+
+    }else{
+        if (destino[1] === origen[1]){ resp = 3 }
+        else if (destino[0] > origen[0]){ resp = 4 }
+        else if (destino[0] < origen[0]){ resp = 6 }
+        else { resp = 5 }
+    }
+    return resp;
 }

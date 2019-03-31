@@ -78,9 +78,22 @@ export class DibujarSeres extends Component {
             'border': '1px solid gray',
             'borderRadius': '50%',
         }
+        let styleDest = {
+            'position': 'fixed',
+            'zIndex': 2,
+            'left': this.state.ser.dest[0]*this.state.tam,
+            'top': this.state.ser.dest[1]*this.state.tam,
+            'height': this.state.tam,
+            'width': this.state.tam,
+            'background': 'none',
+            'border': '5px solid green',
+            'borderRadius': '70%',
+            'textAlign': 'center',
+        }
         return (
             <div style={styleSer}>
                 <div>{this.state.id}</div>
+                <div style={styleDest}>dest</div>
             </div>
         )
     }

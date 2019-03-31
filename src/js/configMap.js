@@ -26,7 +26,7 @@ export function crearObjeto(idPos){
             'id': db.seres.length,
             'tipo': 'criatura',
             'pos': idToPos(idPos),
-            'dest': [0,0],
+            'dest': [6,3],
             'ruta': [],
             'posIntermedia': idToPos(idPos),
             'velocidad': 1,

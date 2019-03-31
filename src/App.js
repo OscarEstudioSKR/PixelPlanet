@@ -5,19 +5,15 @@ import { crearTabla, crearObjeto } from './js/configMap.js';
 import { DibujarSeres } from './js/seresIA.js';
 import DibujarMapa from './js/mapa.js';
 
+//import { direccionMirada } from './js/tabla.js';
+
   
 //MOTOR DEL JUEGO
 
   crearTabla();
-  crearObjeto(45);
-
-
+  crearObjeto(44);
 
 //TALLER DE PRUEBAS
-
-//console.log('idToPos(45): '+idToPos(45));
-//console.log('posToId[5,1]: '+posToId([15,1]));
-//console.log('vecinos(45): '+vecinos(45));
 
 
 
