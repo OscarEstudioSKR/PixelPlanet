@@ -10,13 +10,8 @@ export class DibujarSeres extends Component {
 
         this.state = {
             'id': this.props.ser.id,
-            'pos': this.props.ser.pos,
-            'ser': this.props.ser,
             'tam': db.config.tamCasilla,
-            'velocidad': this.props.ser.velocidad,
             'vivido': 0,
-            'dest': this.props.ser.dest,
-            'ruta': this.props.ser.ruta,
             'posIntermedia': this.props.ser.posIntermedia,
         }
 
@@ -24,12 +19,12 @@ export class DibujarSeres extends Component {
             let ser = db.seres[state.id];
             
             //Esta en su destino
-            if(ser.id !== posToId(ser.dest) ){
+            if(posToId(ser.pos) !== posToId(ser.dest) ){
                 //Hay ruta?
                 if(ser.ruta.length > 0 ){
                     //Hay un paso intermedio. Se usará para mover pixel a pixel y no por cuadrícula.
                     if(state.pos !== state.posIntermedia){
-                        ser.pos = ser.posIntermedia; //Cambiar por movimiento en pixeles y no en cuadrícula pos[0]+(velocidad)
+                        ser.pos = ser.posIntermedia; //Cambiar por movimiento en pixeles y no en cuadrícula pos[0] this.state.velocidad/100
 
                         ser.ruta.shift();
                         if(ser.ruta.length>0){
@@ -40,8 +35,8 @@ export class DibujarSeres extends Component {
                     }
                 }else{
                     //Quiere una nueva ruta
-                    ser.ruta = obtenerRuta(ser, state.pos, state.dest);
-                    ser.posIntermedia = ser.ruta[0];
+                    ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
+                    ser.posIntermedia = ser.ruta[1];
                 }
             }else{
                 //Cambio de acción
@@ -59,7 +54,6 @@ export class DibujarSeres extends Component {
                 'vivido': this.state.vivido++,
             })
             init(this.state);
-            //db.seres[this.state.id].pos[0] += this.state.velocidad/100;
           }, 548);
         
         
@@ -67,11 +61,12 @@ export class DibujarSeres extends Component {
 
     
     render() {
+        let ser = db.seres[this.state.id];
         let styleSer = {
             'position': 'fixed',
             'zIndex': 2,
-            'left': this.state.ser.pos[0]*this.state.tam,
-            'top': this.state.ser.pos[1]*this.state.tam,
+            'left': ser.pos[0]*this.state.tam,
+            'top': ser.pos[1]*this.state.tam,
             'height': this.state.tam,
             'width': this.state.tam,
             'background': 'green',
@@ -81,8 +76,8 @@ export class DibujarSeres extends Component {
         let styleDest = {
             'position': 'fixed',
             'zIndex': 2,
-            'left': this.state.ser.dest[0]*this.state.tam,
-            'top': this.state.ser.dest[1]*this.state.tam,
+            'left': ser.dest[0]*this.state.tam,
+            'top': ser.dest[1]*this.state.tam,
             'height': this.state.tam,
             'width': this.state.tam,
             'background': 'none',
@@ -90,10 +85,27 @@ export class DibujarSeres extends Component {
             'borderRadius': '70%',
             'textAlign': 'center',
         }
+
         return (
             <div style={styleSer}>
                 <div>{this.state.id}</div>
                 <div style={styleDest}>dest</div>
+
+                {ser.ruta.map((pos)=>{
+                    return <div style={{
+                        'position': 'fixed',
+                        'zIndex': 1,
+                        'left': (idToPos(pos)[0]*this.state.tam)+this.state.tam/3,
+                        'top': (idToPos(pos)[1]*this.state.tam)+this.state.tam/3,
+                        'height': this.state.tam/4,
+                        'width': this.state.tam/4,
+                        'borderRadius': '50%',
+                        'border': '1px solid green',
+                        'background': 'white',
+                    }}></div>
+                })}
+
+                
             </div>
         )
     }

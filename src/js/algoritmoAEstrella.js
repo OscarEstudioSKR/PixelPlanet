@@ -9,7 +9,7 @@ export function obtenerRuta(ser, pos, dest){
     let listaFinal = [];
     
     //Numero de vueltas que dará como máximo el bucle para encontrar una ruta;
-    let maximoPasosBucle = 10;
+    let maximoPasosBucle = 100;
     let pasosMaximo = 0;
 
     let listaAbierta = [
@@ -145,6 +145,5 @@ function conversionFinal(listaCerrada, listaFinal, dest, pasosMaximo, rutaComple
             next = objFinal.padre;}
     });
     //Devuelve la ruta
-    console.log('Ruta obtenida en '+ pasosMaximo +' pasos.');
     return listaFinal.reverse();
 }
