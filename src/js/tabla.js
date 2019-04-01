@@ -29,7 +29,7 @@ export function vecinos(id){
     //Abajo
     if(id + numCasillas < casillasTotales-1){arrTemp.push(id + numCasillas)}
     //Abajo-Izquierda
-    if(id + numCasillas -1 < casillasTotales-1 && idToPos( id+numCasillas+1 )[1] === idToPos(id+numCasillas)[1]){ arrTemp.push(id + numCasillas -1)}
+    if(id + numCasillas -1 < casillasTotales-1 && idToPos( id+numCasillas-1 )[1] === idToPos(id+numCasillas)[1]){ arrTemp.push(id + numCasillas -1)}
     //Izquierda
     if(idToPos(id-1)[1] === idToPos(id)[1]){arrTemp.push(id-1);}
     //Arriba-Izquierda

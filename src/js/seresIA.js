@@ -30,13 +30,13 @@ export class DibujarSeres extends Component {
                         if(ser.ruta.length>0){
                             ser.posIntermedia = idToPos(ser.ruta[0]);
                         }else{
-                            ser.posIntermedia = ser.dest;
+                            ser.posIntermedia = ser.pos;
                         }
                     }
                 }else{
                     //Quiere una nueva ruta
                     ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
-                    ser.posIntermedia = ser.ruta[1];
+                    ser.posIntermedia = ser.ruta[0];
                 }
             }else{
                 //Cambio de acción
@@ -72,14 +72,15 @@ export class DibujarSeres extends Component {
             'border': "1px solid",
             'borderColor': ser.color,
             'borderRadius': '50%',
+            'textAlign': 'center',
         }
 
 
         return (
             <div style={styleSer}>
-                <div>{this.state.id}</div>
+                <div>{ser.ruta[ser.ruta.length-1]}</div>
 
-                {ser.ruta.map((pos)=>{
+                {ser.ruta.map((pos, i)=>{
                     return <div style={{
                         'position': 'fixed',
                         'zIndex': 1,
@@ -89,7 +90,7 @@ export class DibujarSeres extends Component {
                         'width': this.state.tam/4,
                         'borderRadius': '50%',
                         'background': ser.color,
-                    }}></div>
+                    }} key={pos+'-'+i}></div>
                 })}
 
                 
