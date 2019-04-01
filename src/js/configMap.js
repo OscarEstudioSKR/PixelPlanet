@@ -22,6 +22,8 @@ export function crearTabla(){
 }
 
 export function crearObjeto(idPos){
+    let listaColores = ['red', 'blue', 'green', 'yellow', 'black', 'pink', 'purple', 'orange', 'aqua', 'brown', 'coral', 'chartreuse'];
+
     db.seres.push(
         {
             'id': db.seres.length,
@@ -31,6 +33,7 @@ export function crearObjeto(idPos){
             'ruta': [],
             'posIntermedia': idToPos(idPos),
             'velocidad': 1,
+            'color': listaColores[Math.floor(Math.random()*listaColores.length)],
             
         }
     )

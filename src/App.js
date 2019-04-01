@@ -11,7 +11,9 @@ import DibujarMapa from './js/mapa.js';
 //MOTOR DEL JUEGO
 
   crearTabla();
-  crearObjeto(44);
+
+  crearObjeto(54);
+
 
 //TALLER DE PRUEBAS
 

@@ -21,19 +21,19 @@ export function vecinos(id){
     //Arriba
     if(id - numCasillas >= 0){arrTemp.push(id - numCasillas)}
     //Arriba-Derecha
-    if(id - numCasillas +1 >= 0 && idToPos( id-numCasillas+1 )[1] === idToPos(id)[1]-1){ arrTemp.push(id - numCasillas +1)}
+    if(id - numCasillas +1 >= 0 && idToPos( id-numCasillas+1 )[1] === idToPos(id-numCasillas)[1]){ arrTemp.push(id - numCasillas +1)}
     //Derecha
     if(idToPos(id+1)[1] === idToPos(id)[1]){arrTemp.push(id+1);}
     //Abajo-Derecha
-    if(id + numCasillas +1 >= 0 && idToPos( id+numCasillas+1 )[1] === idToPos(id)[1]+1){ arrTemp.push(id + numCasillas +1)}
+    if(id + numCasillas +1 < casillasTotales-1 && idToPos( id+numCasillas+1 )[1] === idToPos(id+numCasillas)[1]){ arrTemp.push(id + numCasillas +1)}
     //Abajo
-    if(id + numCasillas < casillasTotales){arrTemp.push(id + numCasillas)}
+    if(id + numCasillas < casillasTotales-1){arrTemp.push(id + numCasillas)}
     //Abajo-Izquierda
-    if(id + numCasillas -1 >= 0 && idToPos( id+numCasillas-1 )[1] === idToPos(id)[1]+1){ arrTemp.push(id + numCasillas -1)}
+    if(id + numCasillas -1 < casillasTotales-1 && idToPos( id+numCasillas+1 )[1] === idToPos(id+numCasillas)[1]){ arrTemp.push(id + numCasillas -1)}
     //Izquierda
     if(idToPos(id-1)[1] === idToPos(id)[1]){arrTemp.push(id-1);}
     //Arriba-Izquierda
-    if(id - numCasillas -1 >= 0 && idToPos( id-numCasillas-1 )[1] === idToPos(id)[1]-1){ arrTemp.push(id - numCasillas -1)}
+    if(id - numCasillas -1 >= 0 && idToPos( id-numCasillas-1 )[1] === idToPos(id-numCasillas)[1]){ arrTemp.push(id - numCasillas -1)}
 
     return arrTemp;
 }

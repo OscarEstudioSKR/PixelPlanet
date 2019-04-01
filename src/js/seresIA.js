@@ -40,9 +40,8 @@ export class DibujarSeres extends Component {
                 }
             }else{
                 //Cambio de acción
-                ser.dest = [Math.floor(Math.random()*30), Math.floor(Math.random()*30)];
-                
-                console.log('Lucy: Nuevo destino '+ser.dest+'<');
+                ser.dest = [Math.floor(Math.random()*29), Math.floor(Math.random()*29)];
+
             }
         }
 
@@ -69,27 +68,16 @@ export class DibujarSeres extends Component {
             'top': ser.pos[1]*this.state.tam,
             'height': this.state.tam,
             'width': this.state.tam,
-            'background': 'green',
-            'border': '1px solid gray',
+            'background': ser.color,
+            'border': "1px solid",
+            'borderColor': ser.color,
             'borderRadius': '50%',
         }
-        let styleDest = {
-            'position': 'fixed',
-            'zIndex': 2,
-            'left': ser.dest[0]*this.state.tam,
-            'top': ser.dest[1]*this.state.tam,
-            'height': this.state.tam,
-            'width': this.state.tam,
-            'background': 'none',
-            'border': '5px solid green',
-            'borderRadius': '70%',
-            'textAlign': 'center',
-        }
+
 
         return (
             <div style={styleSer}>
                 <div>{this.state.id}</div>
-                <div style={styleDest}>dest</div>
 
                 {ser.ruta.map((pos)=>{
                     return <div style={{
@@ -100,8 +88,7 @@ export class DibujarSeres extends Component {
                         'height': this.state.tam/4,
                         'width': this.state.tam/4,
                         'borderRadius': '50%',
-                        'border': '1px solid green',
-                        'background': 'white',
+                        'background': ser.color,
                     }}></div>
                 })}
 
