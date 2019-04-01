@@ -45,21 +45,20 @@ export function distAB(origen, destino){
 
 //Devuelve del 1 al 8, indicando la posicion en que mira 1 = arriba, 2 = arriba-derecha, 3 = derecha...
 export function direccionMirada(idOrigen, idDestino){
-    let resp = 0;
     let origen = idToPos(idOrigen);
     let destino = idToPos(idDestino);
 
     if( idDestino < idOrigen ){
-        if (destino[1] === origen[1]){ resp = 7 }
-        else if (destino[0] > origen[0]){ resp = 2 }
-        else if (destino[0] < origen[0]){ resp = 8 }
-        else { resp = 1 }
+        if (destino[1] === origen[1]){ return 7 }
+        else if (destino[0] > origen[0]){ return 2 }
+        else if (destino[0] < origen[0]){ return 8 }
+        else { return 1 }
 
-    }else{
-        if (destino[1] === origen[1]){ resp = 3 }
-        else if (destino[0] > origen[0]){ resp = 4 }
-        else if (destino[0] < origen[0]){ resp = 6 }
-        else { resp = 5 }
+    }else if( idDestino > idOrigen ){
+        if (destino[1] === origen[1]){ return 3 }
+        else if (destino[0] > origen[0]){ return 4 }
+        else if (destino[0] < origen[0]){ return 6 }
+        else { return 5 }
     }
-    return resp;
+    return 0;
 }

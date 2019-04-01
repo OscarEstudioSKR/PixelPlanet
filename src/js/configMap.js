@@ -32,7 +32,8 @@ export function crearObjeto(idPos){
             'dest': idToPos(Math.floor(Math.random()*300)),
             'ruta': [],
             'posIntermedia': idToPos(idPos),
-            'velocidad': 1,
+            'velocidad': 5,
+            'direccionMov': 0,
             'color': listaColores[Math.floor(Math.random()*listaColores.length)],
             
         }

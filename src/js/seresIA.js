@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { db } from './db.js';
 import { obtenerRuta} from './algoritmoAEstrella.js';
-import { idToPos, posToId} from './tabla.js';
+import { idToPos, posToId, direccionMirada} from './tabla.js';
 
 
 export class DibujarSeres extends Component {
@@ -22,16 +22,24 @@ export class DibujarSeres extends Component {
             if(posToId(ser.pos) !== posToId(ser.dest) ){
                 //Hay ruta?
                 if(ser.ruta.length > 0 ){
-                    //Hay un paso intermedio. Se usará para mover pixel a pixel y no por cuadrícula.
-                    if(state.pos !== state.posIntermedia){
-                        ser.pos = ser.posIntermedia; //Cambiar por movimiento en pixeles y no en cuadrícula pos[0] this.state.velocidad/100
 
-                        ser.ruta.shift();
+                    //Si no esta en el paso intermedio va a el
+                    if(posToId(ser.pos) !== posToId(ser.posIntermedia)){
+
+
+                        darPasoDireccion(ser, ser.direccionMov);
+                        
                         if(ser.ruta.length>0){
                             ser.posIntermedia = idToPos(ser.ruta[0]);
                         }else{
                             ser.posIntermedia = ser.pos;
                         }
+                    }else{
+                        //Ha llegado al paso intermedio
+                        ser.ruta.shift();
+                        ser.posIntermedia = idToPos(ser.ruta[0]);
+                        ser.direccionMov = direccionMirada(posToId(ser.pos), posToId(ser.posIntermedia));
+                        darPasoDireccion(ser, ser.direccionMov);
                     }
                 }else{
                     //Quiere una nueva ruta
@@ -44,7 +52,43 @@ export class DibujarSeres extends Component {
 
             }
         }
-
+        function darPasoDireccion(ser, direccion){
+            console.log('Llama moverse a '+direccion);
+            let vel = (db.config.tamCasilla/4)/100;
+            
+            switch (direccion) {
+                case 1:
+                    ser.pos[1] -= vel;
+                    break;
+                case 2:
+                    ser.pos[1] -= vel;
+                    ser.pos[0] += vel;
+                    break;
+                case 3:
+                    ser.pos[0] += vel;
+                    break; 
+                case 4:
+                    ser.pos[0] += vel;
+                    ser.pos[1] += vel;
+                    break; 
+                case 5:
+                    ser.pos[1] += vel;
+                    break;   
+                case 6:
+                    ser.pos[1] += vel;
+                    ser.pos[0] -= vel;
+                    break;
+                case 7:
+                    ser.pos[0] -= vel;
+                    break;
+                case 8:
+                    ser.pos[0] -= vel;
+                    ser.pos[1] -= vel;
+                    break;      
+                default:
+                    break;
+            }
+        }
 
 
         //BUCLE DEL PERSONAJE
@@ -53,7 +97,7 @@ export class DibujarSeres extends Component {
                 'vivido': this.state.vivido++,
             })
             init(this.state);
-          }, 548);
+          },Math.abs( 100-db.seres[this.state.id].velocidad*10) );
         
         
     }
