@@ -105,7 +105,7 @@ export class DibujarSeres extends Component {
     render() {
         let ser = db.seres[this.state.id];
         let styleSer = {
-            'position': 'fixed',
+            'position': 'absolute',
             'zIndex': 2,
             'left': ser.pos[0]*this.state.tam,
             'top': ser.pos[1]*this.state.tam,
@@ -122,13 +122,14 @@ export class DibujarSeres extends Component {
         return (
             <div style={styleSer}>
                 
-                {ser.ruta.map((pos, i)=>{
+                {
+                    ser.ruta.map((pos, i)=>{
                     if(pos != posToId(ser.pos)){
                         return <div style={{
-                            'position': 'fixed',
+                            'position': 'absolute',
                             'zIndex': 1,
-                            'left': (idToPos(pos)[0]*this.state.tam)+this.state.tam/3,
-                            'top': (idToPos(pos)[1]*this.state.tam)+this.state.tam/3,
+                            'left': ((idToPos(pos)[0]-ser.pos[0])*this.state.tam)+this.state.tam/3,
+                            'top': ((idToPos(pos)[1]-ser.pos[1])*this.state.tam)+this.state.tam/3,
                             'height': this.state.tam/4,
                             'width': this.state.tam/4,
                             'borderRadius': '50%',

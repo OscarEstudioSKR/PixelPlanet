@@ -50,9 +50,10 @@ class App extends Component {
       <div className="App">
         {
           db.tabla.map((obj, i)=>{
-            return <DibujarMapa db={db} obj={obj} key={obj+'-'+i}/>
+            return <DibujarMapa obj={obj} key={obj+'-'+i}/>
           })
         }
+        
         {
           db.seres.map((ser, i)=>{
             return <DibujarSeres db={db} ser={ser} key={ser+'-'+i}/>

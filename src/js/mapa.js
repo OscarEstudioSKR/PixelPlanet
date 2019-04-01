@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { db } from './db.js';
 
 class DibujarMapa extends Component {
     constructor(props){
@@ -7,26 +7,25 @@ class DibujarMapa extends Component {
 
         this.state = {
             'obj': this.props.obj,
-            'tabla': this.props.db.tabla,
-            'tam': this.props.db.config.tamCasilla,
+            'tabla': db.tabla,
+            'tam': db.config.tamCasilla,
         }
     }
 
     render() {
         let styleCasilla = {
-            'position': 'fixed',
+            'position': 'absolute',
             'left': this.state.obj.pos[0]*this.state.tam,
             'top': this.state.obj.pos[1]*this.state.tam,
             'height': this.state.tam,
             'width': this.state.tam,
-            'background': this.state.obj.obstaculo ? 'gray' : 'white',
+            'background': this.state.obj.obstaculo ? 'gray' : 'none',
             'border': '1px solid gray',
-            'color': 'gray'
+            
         }
 
         return (
             <div style={styleCasilla}>
-                <div>{this.state.obj.id}</div>
             </div>
         )
     }
