@@ -8,6 +8,7 @@ export var db =
       'id': 0,
       'pos': [],
       'obstaculo': false,
+      'penalizacionMov': 0,
       'obj': {}
     }
   },

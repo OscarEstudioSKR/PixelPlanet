@@ -11,6 +11,7 @@ export function crearTabla(){
                 'id': i,
                 'pos': [ x,y ],
                 'obstaculo': Math.random()<0.7 ? false: true,
+                'penalizacionMov': 0,
                 'obj': {}
             });
             i++;
@@ -26,11 +27,11 @@ export function crearObjeto(idPos){
             'id': db.seres.length,
             'tipo': 'criatura',
             'pos': idToPos(idPos),
-            'dest': [6,3],
+            'dest': idToPos(Math.floor(Math.random()*300)),
             'ruta': [],
             'posIntermedia': idToPos(idPos),
             'velocidad': 1,
-            'penalizacionMov': 0,
+            
         }
     )
     console.log('Lucy: Nueva criatura creada en '+idPos);
