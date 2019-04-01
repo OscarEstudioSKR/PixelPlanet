@@ -22,7 +22,7 @@ export function crearTabla(){
 }
 
 export function crearObjeto(idPos){
-    let listaColores = ['red', 'blue', 'green', 'yellow', 'black', 'pink', 'purple', 'orange', 'aqua', 'brown', 'coral', 'chartreuse'];
+    let listaColores = ['red', 'blue', 'green', 'yellow', 'pink', 'purple', 'orange', 'aqua', 'brown', 'coral', 'chartreuse'];
 
     db.seres.push(
         {

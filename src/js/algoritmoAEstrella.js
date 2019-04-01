@@ -74,7 +74,6 @@ export function obtenerRuta(ser, pos, dest){
             });
         }
         if(pasosMaximo>maximoPasosBucle-1){
-            console.log('Ruta no ha sido obtenida por completo');
             return conversionFinal(listaCerrada, listaFinal, dest, pasosMaximo);
         }
     }

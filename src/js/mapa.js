@@ -21,6 +21,7 @@ class DibujarMapa extends Component {
             'width': this.state.tam,
             'background': this.state.obj.obstaculo ? 'gray' : 'white',
             'border': '1px solid gray',
+            'color': 'gray'
         }
 
         return (

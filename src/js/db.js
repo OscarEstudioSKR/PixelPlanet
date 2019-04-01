@@ -6,7 +6,7 @@ export var db =
     'tamCasilla': 50,
     'tablaVacia': {
       'id': 0,
-      'pos': [],
+      'pos': [0,0],
       'obstaculo': false,
       'penalizacionMov': 0,
       'obj': {}

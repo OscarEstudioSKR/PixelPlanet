@@ -78,21 +78,23 @@ export class DibujarSeres extends Component {
 
         return (
             <div style={styleSer}>
-                <div>{ser.ruta[ser.ruta.length-1]}</div>
-
+                
                 {ser.ruta.map((pos, i)=>{
-                    return <div style={{
-                        'position': 'fixed',
-                        'zIndex': 1,
-                        'left': (idToPos(pos)[0]*this.state.tam)+this.state.tam/3,
-                        'top': (idToPos(pos)[1]*this.state.tam)+this.state.tam/3,
-                        'height': this.state.tam/4,
-                        'width': this.state.tam/4,
-                        'borderRadius': '50%',
-                        'background': ser.color,
-                    }} key={pos+'-'+i}></div>
-                })}
+                    if(pos != posToId(ser.pos)){
+                        return <div style={{
+                            'position': 'fixed',
+                            'zIndex': 1,
+                            'left': (idToPos(pos)[0]*this.state.tam)+this.state.tam/3,
+                            'top': (idToPos(pos)[1]*this.state.tam)+this.state.tam/3,
+                            'height': this.state.tam/4,
+                            'width': this.state.tam/4,
+                            'borderRadius': '50%',
+                            'background': ser.color,
+                        }} key={pos+'-'+i}></div>
+                    }})
+                }
 
+                <div style={{'marginTop': '30%'}}>{ser.ruta[ser.ruta.length-1]}</div>
                 
             </div>
         )
