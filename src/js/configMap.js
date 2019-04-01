@@ -10,7 +10,7 @@ export function crearTabla(){
             db.tabla.push({
                 'id': i,
                 'pos': [ x,y ],
-                'obstaculo': Math.random()<0.7 ? false: true,
+                'obstaculo': Math.random()<0.75 ? false: true,
                 'penalizacionMov': 0,
                 'obj': {}
             });
@@ -32,7 +32,7 @@ export function crearObjeto(idPos){
             'dest': idToPos(Math.floor(Math.random()*300)),
             'ruta': [],
             'posIntermedia': idToPos(idPos),
-            'velocidad': 5,
+            'velocidad': Math.floor(Math.random()*7)+1,
             'direccionMov': 0,
             'color': listaColores[Math.floor(Math.random()*listaColores.length)],
             

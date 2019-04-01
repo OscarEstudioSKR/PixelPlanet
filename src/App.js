@@ -12,10 +12,32 @@ import DibujarMapa from './js/mapa.js';
 
   crearTabla();
 
-  crearObjeto(54);
+
+  for(let i = 0; i< 1; i++){
+    crearObjeto(i);
+  }
+  
 
 
 //TALLER DE PRUEBAS
+
+const times = [];
+let fps;
+
+function refreshLoop() {
+  console.log('FPS: '+fps);
+  window.requestAnimationFrame(() => {
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+    refreshLoop();
+  });
+}
+
+refreshLoop();
 
 
 

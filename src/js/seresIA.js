@@ -48,13 +48,12 @@ export class DibujarSeres extends Component {
                 }
             }else{
                 //Cambio de acción
-                ser.dest = [Math.floor(Math.random()*29), Math.floor(Math.random()*29)];
+                ser.dest = idToPos(Math.floor(Math.random()*(db.config.numCasillas*db.config.numCasillas)));
 
             }
         }
         function darPasoDireccion(ser, direccion){
-            console.log('Llama moverse a '+direccion);
-            let vel = (db.config.tamCasilla/4)/100;
+            let vel = (db.config.tamCasilla/4)/db.config.tamCasilla;
             
             switch (direccion) {
                 case 1:
