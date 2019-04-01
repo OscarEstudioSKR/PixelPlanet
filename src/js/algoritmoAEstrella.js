@@ -7,6 +7,11 @@ export function obtenerRuta(ser, pos, dest){
     let posTemp = posToId(pos);
     let listaCalcular = [];
     let listaFinal = [];
+    
+    //Numero de vueltas que dará como máximo el bucle para encontrar una ruta;
+    let maximoPasosBucle = 10;
+    let pasosMaximo = 0;
+
     let listaAbierta = [
         {
         'id': posToId(pos),
@@ -18,30 +23,21 @@ export function obtenerRuta(ser, pos, dest){
         }
     ];
 
-
-
-    for(let i = 0; i < 20; i++){
+    while (pasosMaximo < maximoPasosBucle) {
+        pasosMaximo++;
 
         //1. Meter menor F de abierta a cerrada y eliminarlo. Cambiar posicion actual
         if( listaAbierta.length > 0 ){  
             posTemp = aCerrada( menorF( listaAbierta ), listaAbierta, listaCerrada).id;
-            console.log('Lucy: Nueva posición '+posTemp+' a lista CERRADA ');
-            console.log('Cerrada: '+JSON.stringify(listaCerrada));
         }
 
         //2. Almacenar vecinos en listaCalcular
         listaCalcular = vecinos(posTemp);
-        console.log('Lucy: Nuevos vecinos de '+posTemp+' en listaCalcular: '+ JSON.stringify(listaCalcular));
 
         //3 Obj es el destino?
-
         let idFinal = listaCalcular.filter((obj)=>{return obj == posToId(dest)});
-
         if( idFinal[0] == posToId(dest) ){
             let el = listaCerrada[listaCerrada.length-1];
-            
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            console.log('Lucy: Ruta final encontrada en '+JSON.stringify(idFinal[0]));
 
             listaCerrada.push(
                 {
@@ -51,68 +47,37 @@ export function obtenerRuta(ser, pos, dest){
                     'f': el.g+costeBase( direccionMirada( el.id, idFinal[0] )) + (distAB( idFinal[0] ,posToId( dest ) )*10) + db.tabla[idFinal[0]].penalizacionMov,
                     'padre': el.id,
                 });
+
+            //Conversión final y fin del programa.
+            return conversionFinal(listaCerrada, listaFinal, dest, pasosMaximo);
             
-            console.log('ListaCerrada final: '+JSON.stringify(listaCerrada));
-
-            let arrInversa = listaCerrada.reverse();
-            let next = arrInversa[0].id;
-            listaFinal.push(posToId( dest ));
-
-            arrInversa.map((objFinal, i)=>{
-                if(objFinal.id == next){ 
-                    listaFinal.push(objFinal.id);
-                    next = objFinal.padre;}
-            });
-            console.log('Ruta: '+listaFinal);
-            console.log('Fin del programa');
-            return listaFinal.reverse();
-
-
         }else{
-
+            //4.Comprobar posiciones...
             listaCalcular.map((obj)=>{
 
-                console.log('Comprobando '+obj+'...');
-
-                //2.2 Si no está en lista cerrada y no es un obstaculo
+                //Si no está en lista cerrada y no es un obstaculo
                 if( listaCerrada.filter( objCerrada => objCerrada.id === obj ).length === 0 && db.tabla[obj].obstaculo === false){
-
-                    //Está en la lista abierta
+          
                     let objDestino = listaAbierta.filter( objAbierta => objAbierta.id === obj );
                     let el = listaCerrada[listaCerrada.length-1];
 
                     if(objDestino.length>0){
-                        console.log(obj+' está en lista abierta: '+JSON.stringify(listaAbierta));
-
+                        //Si está en la lista abierta
                         if(el.g + costeBase( direccionMirada( el.id, obj )) < objDestino.g){
-                            console.log( console.log(obj+' editado como '+JSON.stringify(el)))
                             return addObj( el.g,listaAbierta, obj, dest, db, posTemp );
                         }
-
                     }else{
-                        //No está en lista abierta, lo añade
-                        addObj( el.g, listaAbierta, obj, dest, db, posTemp );
-                        return console.log('Añadiendo a lista abierta ' + obj);
-                        
+                        //Si no está en lista abierta, lo añade
+                        return addObj( el.g, listaAbierta, obj, dest, db, posTemp );
                     }
-
-                }console.log(obj+' descartado!');
-
-                
+                }
             });
         }
-
+        if(pasosMaximo>maximoPasosBucle-1){
+            console.log('Ruta no ha sido obtenida por completo');
+            return conversionFinal(listaCerrada, listaFinal, dest, pasosMaximo);
+        }
     }
-    console.log('///////////////////////////////////////////////////////////////////////');
-    console.log('RESUMEN FINAL');
-    console.log('Abierta: '+JSON.stringify(listaAbierta));
-    console.log('Cerrada: '+JSON.stringify(listaCerrada));
-    console.log('Ruta final: '+listaFinal);
-    console.log('PosTemp Final: '+posTemp);
-    console.log('///////////////////////////////////////////////////////////////////////');
-
-    
-    
 }
 
 function costeBase(direccion){
@@ -127,7 +92,6 @@ function costeBase(direccion){
 
 function menorF(arr){
 
-    console.log('De la lista '+JSON.stringify(arr));
     let idArrFinal = 0;
     let f = arr[0].f;
 
@@ -136,12 +100,11 @@ function menorF(arr){
             f = obj.f
             idArrFinal = i;};
     });
-
-    console.log('Elige con menor F '+JSON.stringify(arr[idArrFinal]));
     return arr[idArrFinal];
 }
 
 function aCerrada(id, abierta, cerrada){
+
     abierta.map((obj, i)=>{
         if(obj === id) {
             cerrada.push(obj);
@@ -152,6 +115,7 @@ function aCerrada(id, abierta, cerrada){
 }
 
 function addObj(g, listaAbierta, obj, dest, db, posTemp){
+
     listaAbierta.push(
         {
             'id': obj,
@@ -162,4 +126,25 @@ function addObj(g, listaAbierta, obj, dest, db, posTemp){
         }
     );
     return listaAbierta[listaAbierta.lenght-1];
+}
+
+function conversionFinal(listaCerrada, listaFinal, dest, pasosMaximo, rutaCompleta){
+
+    let arrInversa = listaCerrada.reverse();
+    let next = arrInversa[0].id;
+    if(rutaCompleta){
+        listaFinal.push(posToId( dest ));
+    }else{
+        listaFinal.push(next);
+    }
+    
+
+    arrInversa.map((objFinal, i)=>{
+        if(objFinal.id == next){ 
+            listaFinal.push(objFinal.id);
+            next = objFinal.padre;}
+    });
+    //Devuelve la ruta
+    console.log('Ruta obtenida en '+ pasosMaximo +' pasos.');
+    return listaFinal.reverse();
 }

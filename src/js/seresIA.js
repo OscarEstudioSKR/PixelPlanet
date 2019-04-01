@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { db } from './db.js';
 import { obtenerRuta} from './algoritmoAEstrella.js';
-import { idToPos} from './tabla.js';
+import { idToPos, posToId} from './tabla.js';
 
 
 export class DibujarSeres extends Component {
@@ -24,7 +24,7 @@ export class DibujarSeres extends Component {
             let ser = db.seres[state.id];
             
             //Esta en su destino
-            if(ser.pos !== ser.dest ){
+            if(ser.id !== posToId(ser.dest) ){
                 //Hay ruta?
                 if(ser.ruta.length > 0 ){
                     //Hay un paso intermedio. Se usará para mover pixel a pixel y no por cuadrícula.
