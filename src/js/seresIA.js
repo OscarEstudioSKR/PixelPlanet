@@ -4,6 +4,7 @@ import { obtenerRuta} from './algoritmoAEstrella.js';
 import { idToPos, posToId, direccionMirada} from './tabla.js';
 
 
+
 export class DibujarSeres extends Component {
     constructor(props){
         super(props);
@@ -104,6 +105,7 @@ export class DibujarSeres extends Component {
     
     render() {
         let ser = db.seres[this.state.id];
+        console.log(ser.img);
         let styleSer = {
             'position': 'absolute',
             'zIndex': 2,
@@ -111,11 +113,10 @@ export class DibujarSeres extends Component {
             'top': ser.pos[1]*this.state.tam,
             'height': this.state.tam,
             'width': this.state.tam,
-            'background': ser.color,
-            'border': "1px solid",
-            'borderColor': ser.color,
-            'borderRadius': '50%',
-            'textAlign': 'center',
+
+            'backgroundImage': 'url('+ser.img+')',
+            'backgroundPosition': ser.posImg,
+            'backgroundSize': db.config.tamCasilla*6,
         }
 
 
@@ -127,7 +128,6 @@ export class DibujarSeres extends Component {
                     if(pos != posToId(ser.pos)){
                         return <div style={{
                             'position': 'absolute',
-                            'zIndex': 1,
                             'left': ((idToPos(pos)[0]-ser.pos[0])*this.state.tam)+this.state.tam/3,
                             'top': ((idToPos(pos)[1]-ser.pos[1])*this.state.tam)+this.state.tam/3,
                             'height': this.state.tam/4,
@@ -137,8 +137,6 @@ export class DibujarSeres extends Component {
                         }} key={pos+'-'+i}></div>
                     }})
                 }
-
-                <div style={{'marginTop': '30%'}}>{ser.ruta[ser.ruta.length-1]}</div>
                 
             </div>
         )
