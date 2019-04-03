@@ -6,29 +6,26 @@ class DibujarMapa extends Component {
         super(props);
 
         this.state = {
-            'obj': this.props.obj,
-            'tabla': db.tabla,
-            'tam': db.config.tamCasilla,
+            'obj': this.props.obj.id
         }
-
-
     }
 
     render() {
+        let ser = db.tabla[this.state.obj];
         let imgPos = ()=>{
-            let x = (this.state.obj.posImg[0]*db.config.tamCasilla)/200;
-            let y = (this.state.obj.posImg[1]*db.config.tamCasilla)/200;
+            let x = (ser.posImg[0]*db.config.tamCasilla)/200;
+            let y = (ser.posImg[1]*db.config.tamCasilla)/200;
             return x+'px '+y+'px';
         }
 
         let styleCasilla = {
             'position': 'absolute',
-            'left': this.state.obj.pos[0]*this.state.tam,
-            'top': this.state.obj.pos[1]*this.state.tam,
-            'height': this.state.tam,
-            'width': this.state.tam,
+            'left': ser.pos[0]*db.config.tamCasilla,
+            'top': ser.pos[1]*db.config.tamCasilla,
+            'height': db.config.tamCasilla,
+            'width': db.config.tamCasilla,
 
-            'backgroundImage': 'url('+this.state.obj.imgSuelo+')',
+            'backgroundImage': 'url('+ser.imgSuelo+')',
             'backgroundPosition': imgPos(),
             'backgroundSize': db.config.tamCasilla*6,
             

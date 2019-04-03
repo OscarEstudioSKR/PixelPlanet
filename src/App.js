@@ -41,15 +41,45 @@ function refreshLoop() {
 
 //refreshLoop();
 
+//Detectar entradas del teclado
+let tecla = 0;
+document.onkeypress = (event)=>{
+  console.log("Tecla: " +event.keyCode);
 
+  if(event.keyCode=== 101 && db.config.tamCasilla+10 < 150){ db.config.tamCasilla += 10;}
+  if(event.keyCode === 113 && db.config.tamCasilla-10 > 0){ db.config.tamCasilla -= 10;}
+  if(event.keyCode === 100){ window.scrollTo(window.scrollX+25, window.scrollY);}
+  if(event.keyCode === 97){ window.scrollTo(window.scrollX-25, window.scrollY);}
+  if(event.keyCode === 119){ window.scrollTo(window.scrollX, window.scrollY-25);}
+  if(event.keyCode === 115){ window.scrollTo(window.scrollX, window.scrollY+25);}
+  tecla = event.keyCode;
+}
+document.onkeyup = (event)=>{
+  if(event.keyCode == tecla){
+    tecla = 0;
+  }
+}
+
+//Detectar entradas del ratón
+document.onmousedown = (event)=>{
+  console.log("Codigo ratón: " +event.button);
+
+}
 
 //PINTAR EL JUEGO
 
 class App extends Component {
 
+  constructor(props){
+    super(props);
+    this.state = {
+      'tamCasilla': db.config.tamCasilla,
+    }
+  }
+
   render() {
     return (
-      <div className="App">
+      <div className="App" >
         {
           db.tabla.map((obj, i)=>{
             return <DibujarMapa obj={obj} key={obj+'-'+i}/>
@@ -60,7 +90,7 @@ class App extends Component {
           db.seres.map((ser, i)=>{
             return <DibujarSeres db={db} ser={ser} key={ser+'-'+i}/>
           })
-        }   
+        } 
       </div>
     );
   }

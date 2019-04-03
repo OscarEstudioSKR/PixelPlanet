@@ -16,22 +16,41 @@ export function crearTabla(){
                 'penalizacionMov': 0,
                 'imgSuelo': spriteMapaSuelo01,
                 'posImg': 
-                    Math.random()< 0.92 ? [0,0] : 
+                    Math.random()< 0.85 ? [0,0] : 
                     Math.random() > 0.9 ? 
                         Math.random() > 0.7 ? [1000, 800] : [Math.floor(Math.random()*6)*200, 800]:
                         [Math.floor(Math.random()*7)*200, 1400-Math.floor(Math.random()*3)*200],
             });
             i++;
+            if(db.tabla[db.tabla.length-1].posImg[1] === 800){
+                db.tabla[db.tabla.length-1].penalizacionMov = 25;
+            }
     }}
 
-   //Generar Placa
-   generarBloques( 'expansiva', 300, 500, 2, 3);
-   generarBloques( 'compacta', 300, 500, 2, 5);
-   generarBloques( 'compacta', 1, 5, 20, 30);
+   //Generar Placa Valle
+   generarBioma('Montaña')
 
 }
 
-export function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax){
+function generarBioma(tipo){
+    switch (tipo) {
+
+        case 'Valle':
+            generarBloques( 'expansiva', 300, 500, 2, 3);
+            generarBloques( 'compacta', 300, 500, 2, 5);
+            generarBloques( 'compacta', 1, 5, 20, 30);
+            break;
+        case 'Montaña':
+            generarBloques( 'expansiva', 300, 500, 2, 3);
+            generarBloques( 'compacta', 50, 200, 10, 20);
+            generarBloques( 'compacta', 1, 20, 20, 30);
+            break;
+        default:
+            break;
+    }
+}
+
+function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax){
 
     let ran = (min, max)=>{ return Math.floor(Math.random()*(max-min+1) )+min; }  
     let numCasillasTotal = db.config.numCasillas*db.config.numCasillas;   

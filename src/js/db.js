@@ -3,7 +3,7 @@ export var db =
 {
   'config':{
     'numCasillas': 100,
-    'tamCasilla': 20,
+    'tamCasilla': 50,
     'tablaVacia': {
       'id': 0,
       'pos': [0,0],
