@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { db } from './js/db.js';
-import { crearTabla, crearObjeto } from './js/configMap.js';
+import { crearTabla, crearObjeto, recalcularObstaculos } from './js/configMap.js';
 import { DibujarSeres } from './js/seresIA.js';
 import DibujarMapa from './js/mapa.js';
 
@@ -11,9 +11,10 @@ import DibujarMapa from './js/mapa.js';
 //MOTOR DEL JUEGO
 
   crearTabla();
+  db.tabla.map( obj => recalcularObstaculos(obj) );
 
 
-  for(let i = 0; i< 1; i++){
+  for(let i = 0; i< 5; i++){
     crearObjeto(i);
   }
   

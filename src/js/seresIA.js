@@ -105,7 +105,6 @@ export class DibujarSeres extends Component {
     
     render() {
         let ser = db.seres[this.state.id];
-        console.log(ser.img);
         let styleSer = {
             'position': 'absolute',
             'zIndex': 2,
