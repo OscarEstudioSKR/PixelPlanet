@@ -1,7 +1,9 @@
 import { db } from './db.js';
 import { idToPos, vecinos, direccionMirada} from './tabla.js';
 import spriteMapaSuelo01 from '../recurse/SpritesTerreno01.jpg';
+import spriteMapaSuelo02 from '../recurse/SpritesTerreno02.jpg';
 import personajes01 from '../recurse/Personajes01.png';
+
 
 export function crearTabla(){
 
@@ -13,49 +15,67 @@ export function crearTabla(){
                 'id': i,
                 'pos': [ x,y ],
                 'obstaculo': false,
+                'imagenEncadenada': false,
                 'penalizacionMov': 0,
                 'imgSuelo': spriteMapaSuelo01,
                 'posImg': 
-                    Math.random()< 0.85 ? [0,0] : 
-                    Math.random() > 0.9 ? 
+                    Math.random()< 0.75 ? [0,0] : 
+                    Math.random() > 0.95 ? 
                         Math.random() > 0.7 ? [1000, 800] : [Math.floor(Math.random()*6)*200, 800]:
                         [Math.floor(Math.random()*7)*200, 1400-Math.floor(Math.random()*3)*200],
             });
             i++;
             if(db.tabla[db.tabla.length-1].posImg[1] === 800){
-                db.tabla[db.tabla.length-1].penalizacionMov = 25;
+                db.tabla[db.tabla.length-1].penalizacionMov = 300;
             }
     }}
 
-   //Generar Placa Valle
-   generarBioma('Montaña')
+   //Generar Placa
+   generarBioma('Bosque verde');
+   generarBioma('Montaña');
+   generarBioma('Lagos');
+   
 
 }
 
-function generarBioma(tipo){
-    switch (tipo) {
+function generarBioma(bioma){
+    switch (bioma) {
 
         case 'Valle':
-            generarBloques( 'expansiva', 300, 500, 2, 3);
-            generarBloques( 'compacta', 300, 500, 2, 5);
-            generarBloques( 'compacta', 1, 5, 20, 30);
+            generarBloques( 'expansiva', 300, 500, 2, 3, spriteMapaSuelo01, 'elevacion');
+            generarBloques( 'compacta', 300, 500, 2, 5, spriteMapaSuelo01, 'elevacion');
+            generarBloques( 'compacta', 1, 5, 20, 30, spriteMapaSuelo01, 'elevacion');
             break;
         case 'Montaña':
-            generarBloques( 'expansiva', 300, 500, 2, 3);
-            generarBloques( 'compacta', 50, 200, 10, 20);
-            generarBloques( 'compacta', 1, 20, 20, 30);
+            generarBloques( 'expansiva', 300, 500, 2, 3, spriteMapaSuelo01, 'elevacion');
+            generarBloques( 'compacta', 50, 200, 10, 20, spriteMapaSuelo01, 'elevacion');
+            generarBloques( 'compacta', 1, 20, 20, 30, spriteMapaSuelo01, 'elevacion');
+            break;
+        case 'Lagos':
+            generarBloques( 'expansiva', 300, 500, 2, 3, spriteMapaSuelo02, 'agua');
+            generarBloques( 'compacta', 50, 200, 10, 20, spriteMapaSuelo02, 'agua');
+            generarBloques( 'compacta', 20, 50, 20, 30, spriteMapaSuelo02, 'suelo');
+            break;
+        case 'Bosque verde':
+            generarBloques( 'repartida', 1, 100, 5, 10, spriteMapaSuelo02, 'arboledaVerde');
+            generarBloques( 'expansiva', 60, 150, 2, 4, spriteMapaSuelo02, 'arboledaVerde');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
             break;
         default:
             break;
     }
 }
 
-function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax){
+function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBloque){
 
     let ran = (min, max)=>{ return Math.floor(Math.random()*(max-min+1) )+min; }  
     let numCasillasTotal = db.config.numCasillas*db.config.numCasillas;   
     let listaTemp = [];
-    let listaObstaculos = [ran(0, numCasillasTotal)];
+    let listaFinal = [];
 
     for(let cantidad = 0; cantidad < ran(cantMin, cantMax) ; cantidad++){
         listaTemp = [ran(0, numCasillasTotal)];
@@ -64,30 +84,70 @@ function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax){
 
             if(tipo === 'expansiva'){
                 listaTemp = listaTemp.concat( vecinos( listaTemp[listaTemp.length-1] ).filter(()=>{return ran(0,100)>80}));
-
-            }else if(tipo === 'compacta'){
+            }
+            else if(tipo === 'compacta'){
                 listaTemp = listaTemp.concat( vecinos( listaTemp[listaTemp.length-1] ).filter(()=>{return ran(0,100)>30}));
                 listaTemp = listaTemp.concat( vecinos( listaTemp[ran(listaTemp.length/2, listaTemp.length)] ));
             }
-            listaObstaculos = listaObstaculos.concat(listaTemp);
+            else if(tipo === 'repartida'){
+                listaTemp = listaTemp.concat( vecinos( listaTemp[ran(0, listaTemp.length-1)] ).filter(()=>{return ran(0,100)>90}));
+                listaTemp[ran(0, listaTemp.length-1)] = ran(0, numCasillasTotal-1);
+            }
+            listaFinal = listaFinal.concat(listaTemp);
         }
     }
 
     //Añadir todos los objetos a la tabla
-    listaObstaculos.map( obj=> db.tabla[obj].obstaculo = true );
+    let objetoBaseRandom = [ ran(0,5)*200 ,ran(4,7)*200 ];
+    listaFinal.map( obj=> {
+        db.tabla[obj].imgSuelo = imgBioma;
+
+        if(tipoBloque == 'elevacion'){
+            db.tabla[obj].obstaculo = true;            
+            db.tabla[obj].imagenEncadenada = true;
+            db.tabla[obj].penalizacionMov = 1000;
+        }
+        if(tipoBloque == 'agua'){
+            db.tabla[obj].obstaculo = false;
+            db.tabla[obj].imagenEncadenada = true;
+            db.tabla[obj].penalizacionMov = 400;
+        }
+        if(tipoBloque == 'suelo'){
+            db.tabla[obj].obstaculo = false;
+            db.tabla[obj].imagenEncadenada = false;
+            db.tabla[obj].penalizacionMov = 50;
+        }
+        if(tipoBloque == 'arboledaVerde'){
+            db.tabla[obj].posImg = [ (ran(0,10)>8 ? 1000 : 1200) ,800];
+            db.tabla[obj].obstaculo = false;
+            db.tabla[obj].imagenEncadenada = false;
+            db.tabla[obj].penalizacionMov = 300;
+        }
+        if(tipoBloque == 'agrupacion'){
+            db.tabla[obj].posImg = objetoBaseRandom;
+            db.tabla[obj].obstaculo = false;
+            db.tabla[obj].imagenEncadenada = false;
+            db.tabla[obj].penalizacionMov = 0;
+        }
+        
+
+        
+    });
 
 }
 
 
-export function recalcularObstaculos(el){
+export function recalcularImagenes(el){
 
                 //Obstaculos
-                if(el.obstaculo === true){
+                if(el.imagenEncadenada === true){
 
                     let listaVecinos = vecinos(el.id).filter((vecino)=>{
                         let direccion = direccionMirada(el.id, vecino);
-                        if(db.tabla[vecino].obstaculo === true && (direccion == 1 || direccion == 3 || direccion == 5 || direccion == 7))
-                        return db.tabla[vecino].obstaculo === true});
+                        if(db.tabla[vecino].imagenEncadenada === true &&
+                            db.tabla[vecino].imgSuelo === el.imgSuelo &&
+                            (direccion == 1 || direccion == 3 || direccion == 5 || direccion == 7))
+                        return db.tabla[vecino].imagenEncadenada === true});
 
                     //¿Tiene vecinos?
                     if(listaVecinos.length>0){
