@@ -32,24 +32,29 @@ export class DibujarSeres extends Component {
                         
                         if(ser.ruta.length>0){
                             ser.posIntermedia = idToPos(ser.ruta[0]);
-                        }else{
-                            ser.posIntermedia = ser.pos;
                         }
                     }else{
                         //Ha llegado al paso intermedio
                         ser.ruta.shift();
-                        ser.posIntermedia = idToPos(ser.ruta[0]);
-                        ser.direccionMov = direccionMirada(posToId(ser.pos), posToId(ser.posIntermedia));
-                        darPasoDireccion(ser, ser.direccionMov);
+                        if(ser.ruta.length > 0 ){
+                            ser.posIntermedia = idToPos(ser.ruta[0]);
+                            ser.direccionMov = direccionMirada(posToId(ser.pos), posToId(ser.posIntermedia));
+                            darPasoDireccion(ser, ser.direccionMov);
+                        }else{
+                            ser.posIntermedia = ser.pos;
+                        }
+                        
                     }
                 }else{
                     //Quiere una nueva ruta
                     ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
-                    ser.posIntermedia = ser.ruta[0];
+                    if(ser.ruta.length > 0 ){
+                        ser.posIntermedia = idToPos(ser.ruta[0]);
+                    }
                 }
             }else{
                 //Cambio de acción
-                ser.dest = idToPos(Math.floor(Math.random()*(db.config.numCasillas*db.config.numCasillas)));
+                ser.dest = idToPos(Math.floor(Math.random()*((db.config.numCasillas-1)*(db.config.numCasillas-1))));
 
             }
         }
@@ -94,10 +99,12 @@ export class DibujarSeres extends Component {
         //BUCLE DEL PERSONAJE
         setInterval(() => {
             this.setState({
-                'vivido': this.state.vivido++,
+                'vivido': this.state.vivido++
             })
             init(this.state);
-          },Math.abs( 100-db.seres[this.state.id].velocidad*10) );
+
+          },Math.abs( (100-db.seres[this.state.id].velocidad*10) + 
+            db.tabla[posToId( db.seres[this.state.id].posIntermedia )].penalizacionMov ) );
         
         
     }
@@ -121,7 +128,7 @@ export class DibujarSeres extends Component {
 
         return (
             <div style={styleSer}>
-                
+                {db.tabla[posToId( db.seres[this.state.id].posIntermedia )].penalizacionMov*10}
                 {/*
                     ser.ruta.map((pos, i)=>{
                     if(pos != posToId(ser.pos)){
