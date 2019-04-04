@@ -1,5 +1,5 @@
 import { db } from './db.js';
-import { idToPos, vecinos, direccionMirada} from './tabla.js';
+import { idToPos, vecinos, direccionMirada, ran} from './tabla.js';
 import spriteMapaSuelo01 from '../recurse/SpritesTerreno01.jpg';
 import spriteMapaSuelo02 from '../recurse/SpritesTerreno02.jpg';
 import personajes01 from '../recurse/Personajes01.png';
@@ -63,7 +63,8 @@ function generarBioma(bioma){
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
-            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo01, 'agrupacion');
+            generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo01, 'agrupacion');
             break;
         default:
             break;
@@ -72,7 +73,6 @@ function generarBioma(bioma){
 
 function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBloque){
 
-    let ran = (min, max)=>{ return Math.floor(Math.random()*(max-min+1) )+min; }  
     let numCasillasTotal = db.config.numCasillas*db.config.numCasillas;   
     let listaTemp = [];
     let listaFinal = [];
@@ -98,7 +98,7 @@ function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBl
     }
 
     //Añadir todos los objetos a la tabla
-    let objetoBaseRandom = [ ran(0,5)*200 ,ran(4,7)*200 ];
+    let objetoBaseRandom = [ ran(0,5)*200 ,ran(4,6)*200 ];
     listaFinal.map( obj=> {
         db.tabla[obj].imgSuelo = imgBioma;
 
@@ -184,11 +184,25 @@ export function recalcularImagenes(el){
                             if(listaVecinos.includes(el.id-db.config.numCasillas) === false){ db.tabla[el.id].posImg = [600, 600];}
                             if(listaVecinos.includes(el.id+db.config.numCasillas) === false){ db.tabla[el.id].posImg = [600, 400];}
                         }
-                        //Cuatro vecinos
-                        else{ db.tabla[el.id].posImg = [200, 200]; }
+                        
+                        else{ 
+                            listaVecinos = vecinos(el.id).filter((vecino)=>{
+                                return db.tabla[vecino].imgSuelo === el.imgSuelo});
+                                
+                            //Ocho vecinos
+                            if(listaVecinos.length === 8 && ran(0,10)>3){
+                                if(ran(0,20)==20){db.tabla[el.id].posImg = [800, 600];}
+                                else{db.tabla[el.id].posImg = [1000, 600];}
+                            }else{
+                                //Cuatro vecinos
+                                db.tabla[el.id].posImg = [200, 200];                                
+                            }
+                        }
                     //Solo
-                    }else{ db.tabla[el.id].posImg = [1200-(Math.floor(Math.random()*3)*200), 600]; }
+                    }else{ db.tabla[el.id].posImg = [1200, 600]; }
                 }
+
+  
             }
 
 

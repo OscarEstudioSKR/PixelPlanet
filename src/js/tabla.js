@@ -6,6 +6,9 @@ export function idToPos(id){
     let x = Math.abs(id-(y*db.config.numCasillas));
     return [x,y];
 }
+export function ran(min, max){ 
+    return Math.floor(Math.random()*(max-min+1) )+min;
+}
 
 //Devuelve a partir de una [x, y], la posición id de la casilla
 export function posToId(pos){
