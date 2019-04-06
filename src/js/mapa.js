@@ -32,7 +32,10 @@ class DibujarMapa extends Component {
         }
 
         return (
-            <div style={styleCasilla}/>
+            <div style={styleCasilla}>
+                { db.config.vista === 'VerObstaculo' && <div style={{'color': ser.obstaculo ? 'red':'white' }}>{''+ser.obstaculo}</div> }
+                { db.config.vista === 'VerPenalizacion' && <div>{ser.penalizacionMov}</div> }
+            </div>
         )
     }
   }

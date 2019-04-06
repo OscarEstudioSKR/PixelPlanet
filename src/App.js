@@ -22,6 +22,7 @@ import DibujarMapa from './js/mapa.js';
 
 //TALLER DE PRUEBAS
 
+
 const times = [];
 let fps;
 

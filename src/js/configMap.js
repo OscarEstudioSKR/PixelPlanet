@@ -17,6 +17,7 @@ export function crearTabla(){
                 'pos': [ x,y ],
                 'obstaculo': false,
                 'imagenEncadenada': false,
+                'imagenInterior': false,
                 'penalizacionMov': 0,
                 'imgSuelo': spriteMapaSuelo01,
                 'posImg': 
@@ -105,39 +106,39 @@ function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBl
     }
 
     //Añadir todos los objetos a la tabla
-    let objetoBaseRandom = [ ran(0,5)*200 ,ran(4,6)*200 ];
+    let objetoFijo = [ ran(0,5)*200 ,ran(5,7)*200 ];
     listaFinal.map( obj=> {
         db.tabla[obj].imgSuelo = imgBioma;
+        db.tabla[obj].imagenInterior = false;
+        db.tabla[obj].obstaculo = false;
+        db.tabla[obj].imagenEncadenada = false;
+        db.tabla[obj].penalizacionMov = 0;
 
         if(tipoBloque == 'elevacion'){
             db.tabla[obj].obstaculo = true;            
             db.tabla[obj].imagenEncadenada = true;
             db.tabla[obj].penalizacionMov = 1000;
         }
-        if(tipoBloque == 'agua'){
-            db.tabla[obj].obstaculo = false;
+        else if(tipoBloque == 'agua'){
             db.tabla[obj].imagenEncadenada = true;
             db.tabla[obj].penalizacionMov = 400;
         }
-        if(tipoBloque == 'suelo'){
-            db.tabla[obj].obstaculo = false;
-            db.tabla[obj].imagenEncadenada = false;
-            db.tabla[obj].penalizacionMov = 50;
+        else if(tipoBloque == 'suelo'){
+            if(db.tabla[obj].posImg[1] === 800){
+                db.tabla[obj].penalizacionMov = 300;
+            }
         }
-        if(tipoBloque == 'arboledaVerde'){
+        else if(tipoBloque == 'arboledaVerde'){
             db.tabla[obj].posImg = [ (ran(0,10)>8 ? 1000 : 1200) ,800];
-            db.tabla[obj].obstaculo = false;
-            db.tabla[obj].imagenEncadenada = false;
             db.tabla[obj].penalizacionMov = 300;
         }
-        if(tipoBloque == 'agrupacion'){
-            db.tabla[obj].posImg = objetoBaseRandom;
-            db.tabla[obj].obstaculo = false;
-            db.tabla[obj].imagenEncadenada = false;
-            db.tabla[obj].penalizacionMov = 0;
+        else if(tipoBloque == 'agrupacion'){
+            db.tabla[obj].posImg = objetoFijo;
         }
-        if(tipoBloque == 'interior'){
+        else if(tipoBloque == 'interior'){
             db.tabla[obj].imagenEncadenada = true; 
+            db.tabla[obj].imagenInterior = true;
+            db.tabla[obj].penalizacionMov = 30;
         }
         
 
@@ -212,18 +213,19 @@ export function recalcularImagenes(el){
                     }else{ db.tabla[el.id].posImg = [1200, 600]; }
 
                     //Sprites interiores
-                    if(db.tabla[el.id].imgSuelo === spriteMapaSuelo03 && listaVecinos.length === 8){
-
+                    if(db.tabla[el.id].imagenInterior && listaVecinos.length === 8){
+                        db.tabla[el.id].penalizacionMov = 30;
                         if(ran(0,50)>42){
-                            db.tabla[el.id].posImg = [ ran(0,5)*200 ,ran(4,6)*200 ];
+                            db.tabla[el.id].posImg = [ ran(0,5)*200 ,ran(5,7)*200 ];
                             db.tabla[el.id].penalizacionMov = 100;
                         }else if(ran(0,50)>25){
                             db.tabla[el.id].posImg = [ ran(4,5)*200 ,600 ];
                             db.tabla[el.id].penalizacionMov = 350;
                         }else if(ran(0,10)>5){
                             db.tabla[el.id].posImg = [ ran(0,5)*200 ,800 ];
-                            db.tabla[el.id].penalizacionMov = 50;                           
+                            db.tabla[el.id].penalizacionMov = 500;                           
                         }
+                         
                         db.tabla[el.id].obstaculo = false;
                     }
                 }

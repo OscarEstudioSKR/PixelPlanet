@@ -4,6 +4,7 @@ export var db =
   'config':{
     'numCasillas': 100,
     'tamCasilla': 70,
+    'vista': 'VerPenalizacion',  //VerPenalizacion - VerObstaculo
     'tablaVacia': {
       'id': 0,
       'pos': [0,0],
