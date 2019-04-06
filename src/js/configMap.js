@@ -2,6 +2,7 @@ import { db } from './db.js';
 import { idToPos, vecinos, direccionMirada, ran} from './tabla.js';
 import spriteMapaSuelo01 from '../recurse/SpritesTerreno01.jpg';
 import spriteMapaSuelo02 from '../recurse/SpritesTerreno02.jpg';
+import spriteMapaSuelo03 from '../recurse/SpritesTerreno03.jpg';
 import personajes01 from '../recurse/Personajes01.png';
 
 
@@ -31,9 +32,10 @@ export function crearTabla(){
     }}
 
    //Generar Placa
-   generarBioma('Bosque verde');
+   generarBioma('Pradera verde');
    generarBioma('Montaña');
    generarBioma('Lagos');
+   generarBioma('Bosque');
    
 
 }
@@ -56,7 +58,7 @@ function generarBioma(bioma){
             generarBloques( 'compacta', 50, 200, 10, 20, spriteMapaSuelo02, 'agua');
             generarBloques( 'compacta', 20, 50, 20, 30, spriteMapaSuelo02, 'suelo');
             break;
-        case 'Bosque verde':
+        case 'Pradera verde':
             generarBloques( 'repartida', 1, 100, 5, 10, spriteMapaSuelo02, 'arboledaVerde');
             generarBloques( 'expansiva', 60, 150, 2, 4, spriteMapaSuelo02, 'arboledaVerde');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
@@ -65,6 +67,11 @@ function generarBioma(bioma){
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo01, 'agrupacion');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo01, 'agrupacion');
+            break;
+        case 'Bosque':
+            generarBloques( 'compacta', 50, 150, 3, 8, spriteMapaSuelo03, 'interior');
+            generarBloques( 'expansiva', 200, 600, 2, 4, spriteMapaSuelo03, 'interior');
+            generarBloques( 'repartida', 20, 50, 2, 4, spriteMapaSuelo03, 'interior');
             break;
         default:
             break;
@@ -129,17 +136,20 @@ function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBl
             db.tabla[obj].imagenEncadenada = false;
             db.tabla[obj].penalizacionMov = 0;
         }
+        if(tipoBloque == 'interior'){
+            db.tabla[obj].imagenEncadenada = true; 
+        }
         
 
         
-    });
+    }); 
 
 }
 
 
 export function recalcularImagenes(el){
 
-                //Obstaculos
+                //La imagen es encadenada
                 if(el.imagenEncadenada === true){
 
                     let listaVecinos = vecinos(el.id).filter((vecino)=>{
@@ -200,6 +210,22 @@ export function recalcularImagenes(el){
                         }
                     //Solo
                     }else{ db.tabla[el.id].posImg = [1200, 600]; }
+
+                    //Sprites interiores
+                    if(db.tabla[el.id].imgSuelo === spriteMapaSuelo03 && listaVecinos.length === 8){
+
+                        if(ran(0,50)>42){
+                            db.tabla[el.id].posImg = [ ran(0,5)*200 ,ran(4,6)*200 ];
+                            db.tabla[el.id].penalizacionMov = 100;
+                        }else if(ran(0,50)>25){
+                            db.tabla[el.id].posImg = [ ran(4,5)*200 ,600 ];
+                            db.tabla[el.id].penalizacionMov = 350;
+                        }else if(ran(0,10)>5){
+                            db.tabla[el.id].posImg = [ ran(0,5)*200 ,800 ];
+                            db.tabla[el.id].penalizacionMov = 50;                           
+                        }
+                        db.tabla[el.id].obstaculo = false;
+                    }
                 }
 
   
