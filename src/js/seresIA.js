@@ -126,7 +126,17 @@ export class DibujarSeres extends Component {
                 }
             }else{
                 //Ha llegado a su destino
-                console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' para '+ ser.accion);
+                if(ser.accion === ''){
+                    //En destino sin accion - primera vez
+                }else{
+                    console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' y esta '+ ser.accion);
+                    console.log('Necesidad '+ JSON.stringify(ser.necesidad));
+                    ser.memoria[ser.memoriActiva.id].obtiene(ser);
+                    console.log('Agotamiento '+ser.agotamiento);
+
+                    db.seres[state.id].estado = ser.necesidad[0].efecto;
+                }
+
                 
                 
             }

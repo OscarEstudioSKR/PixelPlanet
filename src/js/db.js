@@ -23,7 +23,7 @@ export var db =
     {
       'requisito': (ser)=>{ return ser.agotamiento >99 },
       'accion': 'Desvanecido',
-      'efecto': 'Dormido',
+      'efecto': 'Dormido'
     },
     {
       'requisito': (ser)=>{ return ser.agotamiento >75 },
