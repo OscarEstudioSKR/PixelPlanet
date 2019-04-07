@@ -21,12 +21,6 @@ export var db =
 
   'listaNecesidades': [
     {
-      'requisito': (ser)=>{ return ser.agotamiento >99 },
-      'accion': 'Desvanecido',
-      'efecto': 'Dormido',
-      'tiempoAccion': 600,
-    },
-    {
       'requisito': (ser)=>{ return ser.agotamiento >75 },
       'accion': 'Agotado',
       'efecto': 'Dormido',
