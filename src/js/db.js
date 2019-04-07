@@ -30,14 +30,15 @@ export var db =
   'listaMemorias': [
     {
       'id': 0,
+      'nombre': 'Dormir en el suelo',
       'detonante': "Agotado",
       'accion': "Yendo a dormir",
-      'satisfaccionGeneral': 20,
+      'satisfaccionGeneral': 5,
       'satisfaccionEspecifica': [
         {
           'id': 0,
           'idPos': 503,
-          'especifica': 100,
+          'especifica': 50,
         }
       ],
       'origenDescubrimiento': 'Natal',

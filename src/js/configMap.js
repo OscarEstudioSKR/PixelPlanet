@@ -248,7 +248,6 @@ export function crearSer(idPos){
             'velocidad': ran(1,10),
             'direccionMov': 0,
             'img': personajes01,
-            'posImg': [0,1000],
             'estado': "",
             'accion': "",
             'tareaCalculada': false,

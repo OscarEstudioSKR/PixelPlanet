@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { db } from './db.js';
+import '../css/seresIA.css';
 import { obtenerRuta} from './algoritmoAEstrella.js';
 import { idToPos, posToId, direccionMirada, ran, distAB} from './tabla.js';
 
@@ -205,9 +206,17 @@ export class DibujarSeres extends Component {
         
     }
 
+    cambioImagenAccion(ser){
+        let x = 0;
+        let y = 0;
+        if(ser.estado === 'Agotado'){ x = 400;
+        }else if(ser.estado === 'Dormido'){ x = 800;
+        }
+        return x+'px '+y+'px';;
+    }
     
     render() {
-        let ser = db.seres[this.state.id];
+        let ser = db.seres[this.state.id]; 
         let styleSer = {
             'position': 'absolute',
             'zIndex': 2,
@@ -217,13 +226,13 @@ export class DibujarSeres extends Component {
             'width': this.state.tam,
 
             'backgroundImage': 'url('+ser.img+')',
-            'backgroundPosition': ser.posImg,
+            'backgroundPosition': this.cambioImagenAccion(ser),
             'backgroundSize': db.config.tamCasilla*6,
         }
 
 
         return (
-            <div style={styleSer}>
+            <div style={styleSer} className="Seres">
                 {ser.estado}
                 {/*
                     ser.ruta.map((pos, i)=>{
