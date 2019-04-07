@@ -23,12 +23,14 @@ export var db =
     {
       'requisito': (ser)=>{ return ser.agotamiento >99 },
       'accion': 'Desvanecido',
-      'efecto': 'Dormido'
+      'efecto': 'Dormido',
+      'tiempoAccion': 600,
     },
     {
       'requisito': (ser)=>{ return ser.agotamiento >75 },
       'accion': 'Agotado',
-      'efecto': 'Dormido'
+      'efecto': 'Dormido',
+      'tiempoAccion': 100,
     }
   ],
   'listaMemorias': [
@@ -46,7 +48,7 @@ export var db =
       ],
       'origenDescubrimiento': 'Natal',
       'edadDescubrimiento': 0,
-      'obtiene': (ser)=>{ return db.seres[ser.id].agotamiento = 5},
+      'obtiene': (ser)=>{ return db.seres[ser.id].agotamiento = 10},
     }
   ]
 }

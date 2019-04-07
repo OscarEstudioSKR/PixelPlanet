@@ -129,12 +129,22 @@ export class DibujarSeres extends Component {
                 if(ser.accion === ''){
                     //En destino sin accion - primera vez
                 }else{
-                    console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' y esta '+ ser.accion);
-                    console.log('Necesidad '+ JSON.stringify(ser.necesidad));
-                    ser.memoria[ser.memoriActiva.id].obtiene(ser);
-                    console.log('Agotamiento '+ser.agotamiento);
+                    if(db.seres[state.id].tiempoAccion > 0){
+                        db.seres[state.id].tiempoAccion --;
+                        if(db.seres[state.id].tiempoAccion === 0){
+                            //Tiempo de acción completado
+                            
+                            //Falta valorar si el lugar ha ofrecido lo que prometia
 
-                    db.seres[state.id].estado = ser.necesidad[0].efecto;
+                            db.seres[state.id].estado = '';
+                        }
+                    }else if(ser.necesidad.length>0){
+                        
+                        ser.memoria[ser.memoriActiva.id].obtiene(ser);
+                        db.seres[state.id].estado = ser.necesidad[0].efecto;
+                        db.seres[state.id].tiempoAccion = ser.necesidad[0].tiempoAccion;
+                        console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' y esta '+ ser.estado);
+                    }
                 }
 
                 
