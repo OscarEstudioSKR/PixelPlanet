@@ -33,7 +33,7 @@ export function crearTabla(){
     }}
 
    //Generar Placa
-   generarBioma('Pradera verde');
+   generarBioma('Pradera');
    generarBioma('Montaña');
    generarBioma('Lagos');
    generarBioma('Bosque');
@@ -59,7 +59,7 @@ function generarBioma(bioma){
             generarBloques( 'compacta', 50, 200, 10, 20, spriteMapaSuelo02, 'agua');
             generarBloques( 'compacta', 20, 50, 20, 30, spriteMapaSuelo02, 'suelo');
             break;
-        case 'Pradera verde':
+        case 'Pradera':
             generarBloques( 'repartida', 1, 100, 5, 10, spriteMapaSuelo02, 'arboledaVerde');
             generarBloques( 'expansiva', 60, 150, 2, 4, spriteMapaSuelo02, 'arboledaVerde');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
@@ -71,7 +71,7 @@ function generarBioma(bioma){
             break;
         case 'Bosque':
             generarBloques( 'compacta', 50, 150, 3, 8, spriteMapaSuelo03, 'interior');
-            generarBloques( 'expansiva', 200, 600, 2, 4, spriteMapaSuelo03, 'interior');
+            generarBloques( 'expansiva', 400, 800, 2, 4, spriteMapaSuelo03, 'interior');
             generarBloques( 'repartida', 20, 50, 2, 4, spriteMapaSuelo03, 'interior');
             break;
         default:
@@ -138,7 +138,7 @@ function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBl
         else if(tipoBloque == 'interior'){
             db.tabla[obj].imagenEncadenada = true; 
             db.tabla[obj].imagenInterior = true;
-            db.tabla[obj].penalizacionMov = 30;
+            db.tabla[obj].penalizacionMov = 10;
         }
         
 
@@ -214,13 +214,12 @@ export function recalcularImagenes(el){
 
                     //Sprites interiores
                     if(db.tabla[el.id].imagenInterior && listaVecinos.length === 8){
-                        db.tabla[el.id].penalizacionMov = 30;
+                        db.tabla[el.id].penalizacionMov = 10;
                         if(ran(0,50)>42){
                             db.tabla[el.id].posImg = [ ran(0,5)*200 ,ran(5,7)*200 ];
                             db.tabla[el.id].penalizacionMov = 100;
                         }else if(ran(0,50)>25){
                             db.tabla[el.id].posImg = [ ran(4,5)*200 ,600 ];
-                            db.tabla[el.id].penalizacionMov = 350;
                         }else if(ran(0,10)>5){
                             db.tabla[el.id].posImg = [ ran(0,5)*200 ,800 ];
                             db.tabla[el.id].penalizacionMov = 500;                           
@@ -235,20 +234,35 @@ export function recalcularImagenes(el){
 
 
 
-export function crearObjeto(idPos){
-
+export function crearSer(idPos){
+    
     db.seres.push(
         {
             'id': db.seres.length,
+            'nombre': db.config.listaNombresF[ ran(0,  db.config.listaNombresF.length-1) ],
             'tipo': 'criatura',
             'pos': idToPos(idPos),
-            'dest': idToPos(Math.floor(Math.random()*300)),
+            'dest': idToPos(idPos),
             'ruta': [],
             'posIntermedia': idToPos(idPos),
-            'velocidad': Math.floor(Math.random()*4)+1,
+            'velocidad': ran(1,10),
             'direccionMov': 0,
             'img': personajes01,
             'posImg': [0,1000],
+            'estado': "",
+            'accion': "",
+            'tareaCalculada': false,
+            'memoriaActiva': {},
+            'objetivoEnMarcha': false,
+            'necesidad': {},
+            'tiempoAccion': 0,
+
+            'inteligencia': ran(7,20),
+            'memoria': [db.listaMemorias[0]],
+            'agotamiento': ran(80,85),
+            'sed': ran(5,70),
+            'hambre': ran(5,70),
+            'salud': ran(5,70),
         }
     )
 }

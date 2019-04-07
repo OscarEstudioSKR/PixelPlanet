@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { db } from './db.js';
 import { obtenerRuta} from './algoritmoAEstrella.js';
-import { idToPos, posToId, direccionMirada} from './tabla.js';
+import { idToPos, posToId, direccionMirada, ran, distAB} from './tabla.js';
 
 
 
@@ -16,20 +16,91 @@ export class DibujarSeres extends Component {
             'posIntermedia': this.props.ser.posIntermedia,
         }
 
+
+        function mejorValoracion(arr, dest){
+            let calcular = (obj, mem)=>{ return (obj.especifica + mem.satisfaccionGeneral + distAB( obj.idPos , posToId( dest )))/3;};         
+            let memFinal = {
+                'id': 0,
+                'mejorIdEspecifica': 0,
+                'valorFinal': 0,
+            }
+            arr.map((mem)=>{
+                mem.satisfaccionEspecifica.map((obj)=>{
+                    if( calcular( obj, mem) > memFinal.valorFinal ){
+                        memFinal = {
+                            'id': mem.id,
+                            'mejorIdEspecifica': obj.id,
+                            'valorFinal': calcular( obj, mem ),
+                        }
+                    }
+                });
+            });
+            return memFinal;
+        }
+
+
         function init(state){
             let ser = db.seres[state.id];
-            
+
+
+            //Estado iniciada?
+            if(ser.estado != "" && ser.objetivoEnMarcha === false){
+                console.log(ser.nombre+' esta '+ser.estado);
+
+                //Buscar la mejor tarea posible
+                if(ser.tareaCalculada === false){
+                    let listaMemoriasCompatibles = ser.memoria.filter((memCal)=>{      
+                        return memCal.detonante === ser.estado;
+                    });
+                    let memFinal = mejorValoracion(listaMemoriasCompatibles, ser.dest);
+
+                    if( memFinal.valorFinal > 0 ){
+                        db.seres[state.id].memoriActiva = memFinal;
+                        db.seres[state.id].tareaCalculada = true;
+                        db.seres[state.id].accion = ser.memoria[ser.memoriActiva.id].accion;
+                        console.log('Sabe que hacer '+ser.accion);
+                    }else{
+
+                        //No hay memoria posible
+                        console.log('No tiene en memoria una solución - Buscar');
+
+                    }           
+                }                
+                    //Realizando acciones calculadas de la memoria  
+                db.seres[state.id].dest = idToPos(ser.memoria[ser.memoriActiva.id].satisfaccionEspecifica[ser.memoriActiva.mejorIdEspecifica].idPos);
+                db.seres[state.id].objetivoEnMarcha = true;
+                console.log('Iniciando accion, nuevo destino en '+posToId(ser.dest));
+
+            }else if(ser.estado === ""){
+
+                console.log('Comprobando necesidades');
+                //Comprobar necesidades
+                db.seres[state.id].necesidad = db.listaNecesidades.filter((necesidad)=>{
+                    return necesidad.requisito(ser);
+                })
+                //Tiene necesidades
+                if( ser.necesidad.length>0){
+                    console.log('Tiene necesidades');
+                    ser.estado =  ser.necesidad[0].accion;
+                }
+                //No tiene necesidades -> Deseos?
+                else{
+                    console.log('Cumpliendo deseos');
+                }
+                
+            }
+
+
             //Esta en su destino
             if(posToId(ser.pos) !== posToId(ser.dest) ){
                 //Hay ruta?
                 if(ser.ruta.length > 0 ){
-
+                    
                     //Si no esta en el paso intermedio va a el
                     if(posToId(ser.pos) !== posToId(ser.posIntermedia)){
 
-
                         darPasoDireccion(ser, ser.direccionMov);
-                        
+                        console.log(ser.accion+' a '+ posToId(ser.dest)+'...');
                         if(ser.ruta.length>0){
                             ser.posIntermedia = idToPos(ser.ruta[0]);
                         }
@@ -47,19 +118,24 @@ export class DibujarSeres extends Component {
                     }
                 }else{
                     //Quiere una nueva ruta
+                    console.log(ser.nombre+' Buscando una nueva ruta');
                     ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
                     if(ser.ruta.length > 0 ){
                         ser.posIntermedia = idToPos(ser.ruta[0]);
                     }
                 }
             }else{
-                //Cambio de acción
-                ser.dest = idToPos(Math.floor(Math.random()*((db.config.numCasillas-1)*(db.config.numCasillas-1))));
-
+                //Ha llegado a su destino
+                console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' para '+ ser.accion);
+                
+                
             }
         }
         function darPasoDireccion(ser, direccion){
             let vel = (db.config.tamCasilla/4)/db.config.tamCasilla;
+
+            if(ran(0, db.tabla[posToId( db.seres[ser.id].posIntermedia )].penalizacionMov) < ser.velocidad ||
+            ran(0,10)>7){//velocidad minima
             
             switch (direccion) {
                 case 1:
@@ -94,6 +170,7 @@ export class DibujarSeres extends Component {
                     break;
             }
         }
+    }
 
 
         //BUCLE DEL PERSONAJE
@@ -103,8 +180,7 @@ export class DibujarSeres extends Component {
             })
             init(this.state);
 
-          },Math.abs( (100-db.seres[this.state.id].velocidad*10) + 
-            db.tabla[posToId( db.seres[this.state.id].posIntermedia )].penalizacionMov ) );
+          },100 );
         
         
     }
@@ -128,7 +204,7 @@ export class DibujarSeres extends Component {
 
         return (
             <div style={styleSer}>
-                {db.tabla[posToId( db.seres[this.state.id].posIntermedia )].penalizacionMov*10}
+                {ser.estado}
                 {/*
                     ser.ruta.map((pos, i)=>{
                     if(pos != posToId(ser.pos)){

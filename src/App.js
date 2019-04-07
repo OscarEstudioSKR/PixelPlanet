@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import { db } from './js/db.js';
-import { crearTabla, generarPlaca, crearObjeto, recalcularImagenes } from './js/configMap.js';
+import { crearTabla, generarPlaca, crearSer, recalcularImagenes } from './js/configMap.js';
 import { DibujarSeres } from './js/seresIA.js';
 import DibujarMapa from './js/mapa.js';
 
-//import { direccionMirada } from './js/tabla.js';
+//import { ran } from './js/tabla.js';
 
   
 //MOTOR DEL JUEGO
@@ -13,12 +13,12 @@ import DibujarMapa from './js/mapa.js';
   crearTabla();
   db.tabla.map( obj => recalcularImagenes(obj) );
 
-
-  for(let i = 0; i< 5; i++){
-    crearObjeto(i);
+  crearSer(0);
+  for(let i = 0; i< 0; i++){
+    crearSer(i);
   }
   
-
+    
 
 //TALLER DE PRUEBAS
 
