@@ -259,7 +259,7 @@ export function crearSer(idPos){
 
             'inteligencia': ran(7,20),
             'memoria': [db.listaMemorias[0]],
-            'agotamiento': ran(100,120),
+            'agotamiento': ran(5,100),
             'sed': ran(5,70),
             'hambre': ran(5,70),
             'salud': ran(5,70),

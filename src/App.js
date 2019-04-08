@@ -14,7 +14,7 @@ import DibujarMapa from './js/mapa.js';
   db.tabla.map( obj => recalcularImagenes(obj) );
 
   crearSer(0);
-  for(let i = 0; i< 5; i++){
+  for(let i = 0; i< 2; i++){
     crearSer(i);
   }
   

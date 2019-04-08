@@ -211,7 +211,7 @@ export class DibujarSeres extends Component {
             if(ran(0, db.tabla[posToId( db.seres[ser.id].posIntermedia )].penalizacionMov) < ser.velocidad ||
             ran(0,10)>7){//velocidad minima
             
-            db.seres[ser.id].agotamiento += 1;
+            db.seres[ser.id].agotamiento += 0.1;
 
             switch (direccion) {
                 case 1:
@@ -288,7 +288,7 @@ export class DibujarSeres extends Component {
 
         return (
             <div style={styleSer} className="Seres">
-                {ser.estado}
+                
                 {/*
                     ser.ruta.map((pos, i)=>{
                     if(pos != posToId(ser.pos)){
