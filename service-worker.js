@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "http//oscarestudioskr.github.io/PixelPlanet/precache-manifest.2a374502c7accaa7a83dc18ae206518e.js"
+  "/PixelPlanet/precache-manifest.bc19a3d9da38879c41c8bc6ff2739a3e.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("http//oscarestudioskr.github.io/PixelPlanet/index.html", {
+workbox.routing.registerNavigationRoute("/PixelPlanet/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
