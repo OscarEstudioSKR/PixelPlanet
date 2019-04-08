@@ -2,7 +2,7 @@
   "name": "pixelgoods",
   "version": "0.0.1",
   "private": true,
-  "homepage": "http//oscarestudioskr.github.io/PixelPlanet",
+  "homepage": "http://oscarestudioskr.github.io/PixelPlanet/",
   "dependencies": {
     "express": "^4.16.4",
     "morgan": "^1.9.1",
