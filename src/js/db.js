@@ -2,9 +2,9 @@
 export var db = 
 {
   'config':{
-    'numCasillas': 100,
+    'numCasillas': 80,
     'tamCasilla': 80,
-    'vista': 'verIdCasillas',  //VerPenalizacion - VerObstaculo - verIdCasillas
+    'vista': '',  //VerPenalizacion - VerObstaculo - verIdCasillas
     'tablaVacia': {
       'id': 0,
       'pos': [0,0],
@@ -22,9 +22,10 @@ export var db =
   'listaNecesidades': [
     {
       'requisito': (ser)=>{ return ser.agotamiento >75 },
+      'estado': 'Agotado',
       'accion': 'Agotado',
       'efecto': 'Dormido',
-      'tiempoAccion': 100,
+      'tiempoAccion': 50,
     }
   ],
   'listaMemorias': [
@@ -37,7 +38,7 @@ export var db =
       'satisfaccionEspecifica': [
         {
           'id': 0,
-          'idPos': 503,
+          'idPos': 33,
           'especifica': 50,
         }
       ],

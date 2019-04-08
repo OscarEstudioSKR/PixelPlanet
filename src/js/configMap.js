@@ -114,28 +114,28 @@ function generarBloques(tipo ,tamMin, tamMax, cantMin, cantMax, imgBioma, tipoBl
         db.tabla[obj].imagenEncadenada = false;
         db.tabla[obj].penalizacionMov = 0;
 
-        if(tipoBloque == 'elevacion'){
+        if(tipoBloque === 'elevacion'){
             db.tabla[obj].obstaculo = true;            
             db.tabla[obj].imagenEncadenada = true;
             db.tabla[obj].penalizacionMov = 1000;
         }
-        else if(tipoBloque == 'agua'){
+        else if(tipoBloque === 'agua'){
             db.tabla[obj].imagenEncadenada = true;
             db.tabla[obj].penalizacionMov = 400;
         }
-        else if(tipoBloque == 'suelo'){
+        else if(tipoBloque === 'suelo'){
             if(db.tabla[obj].posImg[1] === 800){
                 db.tabla[obj].penalizacionMov = 300;
             }
         }
-        else if(tipoBloque == 'arboledaVerde'){
+        else if(tipoBloque === 'arboledaVerde'){
             db.tabla[obj].posImg = [ (ran(0,10)>8 ? 1000 : 1200) ,800];
             db.tabla[obj].penalizacionMov = 300;
         }
-        else if(tipoBloque == 'agrupacion'){
+        else if(tipoBloque === 'agrupacion'){
             db.tabla[obj].posImg = objetoFijo;
         }
-        else if(tipoBloque == 'interior'){
+        else if(tipoBloque === 'interior'){
             db.tabla[obj].imagenEncadenada = true; 
             db.tabla[obj].imagenInterior = true;
             db.tabla[obj].penalizacionMov = 10;
@@ -157,7 +157,7 @@ export function recalcularImagenes(el){
                         let direccion = direccionMirada(el.id, vecino);
                         if(db.tabla[vecino].imagenEncadenada === true &&
                             db.tabla[vecino].imgSuelo === el.imgSuelo &&
-                            (direccion == 1 || direccion == 3 || direccion == 5 || direccion == 7))
+                            (direccion === 1 || direccion === 3 || direccion === 5 || direccion === 7))
                         return db.tabla[vecino].imagenEncadenada === true});
 
                     //¿Tiene vecinos?
@@ -242,7 +242,7 @@ export function crearSer(idPos){
             'nombre': db.config.listaNombresF[ ran(0,  db.config.listaNombresF.length-1) ],
             'tipo': 'criatura',
             'pos': idToPos(idPos),
-            'dest': idToPos(idPos),
+            'dest': idToPos(35),
             'ruta': [],
             'posIntermedia': idToPos(idPos),
             'velocidad': ran(1,10),
@@ -254,6 +254,7 @@ export function crearSer(idPos){
             'memoriaActiva': {},
             'objetivoEnMarcha': false,
             'necesidad': {},
+            'necesidadActivada': false,
             'tiempoAccion': 0,
 
             'inteligencia': ran(7,20),

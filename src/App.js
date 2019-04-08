@@ -14,7 +14,7 @@ import DibujarMapa from './js/mapa.js';
   db.tabla.map( obj => recalcularImagenes(obj) );
 
   crearSer(0);
-  for(let i = 0; i< 0; i++){
+  for(let i = 0; i< 5; i++){
     crearSer(i);
   }
   
@@ -46,7 +46,7 @@ let tecla = 0;
 document.onkeypress = (event)=>{
   console.log("Tecla: " +event.keyCode);
 
-  if(event.keyCode=== 101 && db.config.tamCasilla+10 < 150){ db.config.tamCasilla += 10;}
+  if(event.keyCode === 101 && db.config.tamCasilla+10 < 150){ db.config.tamCasilla += 10;}
   if(event.keyCode === 113 && db.config.tamCasilla-10 > 0){ db.config.tamCasilla -= 10;}
   if(event.keyCode === 100){ window.scrollTo(window.scrollX+25, window.scrollY);}
   if(event.keyCode === 97){ window.scrollTo(window.scrollX-25, window.scrollY);}
@@ -55,7 +55,7 @@ document.onkeypress = (event)=>{
   tecla = event.keyCode;
 }
 document.onkeyup = (event)=>{
-  if(event.keyCode == tecla){
+  if(event.keyCode === tecla){
     tecla = 0;
   }
 }

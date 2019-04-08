@@ -3,6 +3,7 @@ import { db } from './db.js';
 import '../css/seresIA.css';
 import { obtenerRuta} from './algoritmoAEstrella.js';
 import { idToPos, posToId, direccionMirada, ran, distAB} from './tabla.js';
+import { isNullOrUndefined } from 'util';
 
 
 
@@ -18,6 +19,7 @@ export class DibujarSeres extends Component {
         }
 
 
+        //Calcula cual es la mejor valoración de una array de memorias
         function mejorValoracion(arr, dest){
             let calcular = (obj, mem)=>{ return (obj.especifica + mem.satisfaccionGeneral + distAB( obj.idPos , posToId( dest )))/3;};         
             let memFinal = {
@@ -42,122 +44,175 @@ export class DibujarSeres extends Component {
 
         function init(state){
             let ser = db.seres[state.id];
+            let comprobarNecesidades = [];
+            let listaMemoriasCompatibles = [];
+            let memFinal = {};
 
-
-            //Estado iniciada?
-            if(ser.estado != "" && ser.objetivoEnMarcha === false){
-                console.log(ser.nombre+' esta '+ser.estado);
-
-                //Buscar la mejor tarea posible
-                if(ser.tareaCalculada === false){
-                    let listaMemoriasCompatibles = ser.memoria.filter((memCal)=>{      
-                        return memCal.detonante === ser.estado;
-                    });
-                    let memFinal = mejorValoracion(listaMemoriasCompatibles, ser.dest);
-
-                    if( memFinal.valorFinal > 0 ){
-                        db.seres[state.id].memoriActiva = memFinal;
-                        db.seres[state.id].tareaCalculada = true;
-                        db.seres[state.id].accion = ser.memoria[ser.memoriActiva.id].accion;
-                        console.log('Sabe que hacer '+ser.accion);
-                    }else{
-
-                        //No hay memoria posible
-                        console.log('No tiene en memoria una solución - Buscar');
-
-                    }           
-                }                
-                    //Realizando acciones calculadas de la memoria  
-                db.seres[state.id].dest = idToPos(ser.memoria[ser.memoriActiva.id].satisfaccionEspecifica[ser.memoriActiva.mejorIdEspecifica].idPos);
-                db.seres[state.id].objetivoEnMarcha = true;
-                console.log('Iniciando accion, nuevo destino en '+posToId(ser.dest));
-
-            }else if(ser.estado === ""){
+            //NO TIENE NECESIDADES ACTIVAS
+            if(ser.necesidadActivada === false){
 
                 console.log('Comprobando necesidades');
-                //Comprobar necesidades
-                db.seres[state.id].necesidad = db.listaNecesidades.filter((necesidad)=>{
-                    return necesidad.requisito(ser);
-                })
-                //Tiene necesidades
-                if( ser.necesidad.length>0){
-                    console.log('Tiene necesidades');
-                    ser.estado =  ser.necesidad[0].accion;
-                }
-                //No tiene necesidades -> Deseos?
-                else{
-                    console.log('Cumpliendo deseos');
-                }
-                
-            }
-
-
-            //Esta en su destino
-            if(posToId(ser.pos) !== posToId(ser.dest) ){
-                //Hay ruta?
-                if(ser.ruta.length > 0 ){
-                    
-                    //Si no esta en el paso intermedio va a el
-                    if(posToId(ser.pos) !== posToId(ser.posIntermedia)){
-
-                        darPasoDireccion(ser, ser.direccionMov);
-                        console.log(ser.accion+' a '+ posToId(ser.dest)+'...');
-                        if(ser.ruta.length>0){
-                            ser.posIntermedia = idToPos(ser.ruta[0]);
-                        }
-                    }else{
-                        //Ha llegado al paso intermedio
-                        ser.ruta.shift();
-                        if(ser.ruta.length > 0 ){
-                            ser.posIntermedia = idToPos(ser.ruta[0]);
-                            ser.direccionMov = direccionMirada(posToId(ser.pos), posToId(ser.posIntermedia));
-                            darPasoDireccion(ser, ser.direccionMov);
-                        }else{
-                            ser.posIntermedia = ser.pos;
-                        }
+                comprobarNecesidades = db.listaNecesidades.filter((necesidad)=>{ return necesidad.requisito(ser); })
+    
+                //Si tiene necesidades
+                if( comprobarNecesidades.length > 0){
+                    console.log('Necesidad detectada '+comprobarNecesidades[0].estado);
+                    db.seres[state.id].estado = comprobarNecesidades[0].estado;
+    
+                    //Ha CALCULADO UNA SOLUCIÓN
+                    if(ser.tareaCalculada === false){
+                        //NO, NO LO HA CALCULADO AUN
+                        console.log('Calculando tarea...');
                         
+                        //Bloquear siguiente paso
+                        db.seres[state.id].objetivoEnMarcha = false;
+    
+                        //Calcula si tiene en memoria una solución
+                        listaMemoriasCompatibles = ser.memoria.filter((memCal)=>{ return memCal.detonante === ser.estado;});
+                        if( listaMemoriasCompatibles.length > 0){
+    
+                            //Si, tiene una solución
+                            memFinal = mejorValoracion(listaMemoriasCompatibles, ser.dest);
+    
+                            //La solución es satisfactoria?
+                            if( memFinal.valorFinal > 0 ){
+    
+                                //Si, es una solución váida.
+                                db.seres[state.id].memoriActiva = memFinal;
+                                db.seres[state.id].tareaCalculada = true;
+                                db.seres[state.id].objetivoEnMarcha = true;
+                                db.seres[state.id].necesidad = db.listaNecesidades.filter((necesidad)=>{ return necesidad.requisito(ser)})[0];
+                                db.seres[state.id].estado = ser.necesidad.estado;
+                                db.seres[state.id].accion = ser.necesidad.accion;
+                                console.log('Sabe que hacer '+ser.estado);
+                                db.seres[state.id].necesidadActivada = true;
+    
+                                //La solución encontrada no es satisfactoria
+                            }else{
+                                console.log('La solución encontrada no es satisfactoria');
+                            }
+    
+                            //No tiene una solución
+                        }else{
+                            console.log('No conoce una solución');
+                            //db.seres[state.id].estado = 'Explorando';
+                        }
+    
+                        //SI, YA A CALCULADO UNA SOLUCIÓN
+                    }else{
+                        console.log('Tarea calculada con exito!');
                     }
+    
+                //No tiene necesidades
                 }else{
-                    //Quiere una nueva ruta
-                    console.log(ser.nombre+' Buscando una nueva ruta');
-                    ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
-                    if(ser.ruta.length > 0 ){
-                        ser.posIntermedia = idToPos(ser.ruta[0]);
-                    }
+                    console.log('No tiene necesidades');
+                    db.seres[state.id].dest = idToPos(ran(0,500));
+                    db.seres[state.id].objetivoEnMarcha = true;
                 }
             }else{
-                //Ha llegado a su destino
-                if(ser.accion === ''){
-                    //En destino sin accion - primera vez
-                }else{
-                    if(db.seres[state.id].tiempoAccion > 0){
-                        db.seres[state.id].tiempoAccion --;
-                        if(db.seres[state.id].tiempoAccion === 0){
-                            //Tiempo de acción completado
-                            
-                            //Falta valorar si el lugar ha ofrecido lo que prometia
+                //tIENE ACTIVADA LA NECESIDAD
 
+            }
+           
+
+            //TIENE YA UN OBJETIVO
+            if(ser.objetivoEnMarcha === true){
+
+                
+                //Si no está en su destino se mueve hacia el
+                if( posToId(ser.pos) !== posToId(ser.dest) ){
+                    console.log('Moviendose...');
+                    moverse(ser); 
+
+                //Una vez llega a su destino    
+                }else{
+                    //HAY UN TIEMPO DE ACCIÓN DE LA TAREA EN MARCHA?
+                    if(db.seres[state.id].tiempoAccion > 0){
+                        console.log('Tick-tack: '+ser.tiempoAccion);
+                        db.seres[state.id].tiempoAccion --;
+
+                        //TIEMPO CUMPLIDO - CUMPLE LA ACCION Y CAMIBA A ESTADO NORMAL
+                        if(db.seres[state.id].tiempoAccion === 0){
+                            console.log(' y fin');
+                            //Falta valorar si el lugar ha ofrecido lo que prometia
+            
+                            db.seres[state.id].objetivoEnMarcha = false;
+                            db.seres[state.id].tareaCalculada = false;
+                            db.seres[state.id].ruta = [];
                             db.seres[state.id].estado = '';
+                            db.seres[state.id].accion = '';
+                            db.seres[state.id].necesidad = {};
+                            db.seres[state.id].necesidadActivada = false;
                         }
-                    }else if(ser.necesidad.length>0){
+                    
+                    //NO HAY TIEMPO DE ACCIÓN PERO SI UNA NECESIDAD QUE LO ACTIVA
+                    }else if(ser.necesidadActivada){
                         
                         ser.memoria[ser.memoriActiva.id].obtiene(ser);
-                        db.seres[state.id].estado = ser.necesidad[0].efecto;
-                        db.seres[state.id].tiempoAccion = ser.necesidad[0].tiempoAccion;
+                        db.seres[state.id].estado = ser.necesidad.efecto;
+                        db.seres[state.id].tiempoAccion = ser.necesidad.tiempoAccion;
+                        db.seres[state.id].ruta = [];
+                        db.seres[state.id].necesidad = {};
                         console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' y esta '+ ser.estado);
                     }
-                }
-
-                
-                
+                    else{
+                        //RUTA ALCANZADA Y SIN NECESIDADES DE ACCIÓN
+                        db.seres[state.id].tiempoAccion = ran(1,50);
+                    }
+                }            
             }
         }
+
+
+
+        function moverse(ser){
+            console.log('Moviendo...');
+
+            if(ser.ruta.length > 0 ){              
+                //Si no esta en el paso intermedio va a el
+                if(posToId(ser.pos) !== posToId(ser.posIntermedia)){
+                    darPasoDireccion(ser, ser.direccionMov);
+                    //Siguen quedando pasos en la ruta, lo añade como paso intermedio
+                    if(ser.ruta.length>0){
+                        ser.posIntermedia = idToPos(ser.ruta[0]);
+                    }
+                //Ha llegado al paso intermedio
+                }else{                  
+                    ser.ruta.shift();
+                    //Siguen quedando pasos
+                    if(ser.ruta.length > 0 ){
+                        ser.posIntermedia = idToPos(ser.ruta[0]);
+                        ser.direccionMov = direccionMirada(posToId(ser.pos), posToId(ser.posIntermedia));
+                        darPasoDireccion(ser, ser.direccionMov);
+                    //No quedan pasos
+                    }else{
+                        ser.posIntermedia = ser.pos; 
+                    }                     
+                }
+
+            //NO HAY RUTA    
+            }else{
+                //AÑADE UNA NUEVA RUTA HACIA EL DESTINO
+                console.log(ser.nombre+' Buscando una nueva ruta a '+posToId(ser.dest));
+                ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
+                if(ser.ruta.length > 0 ){
+                    ser.posIntermedia = idToPos(ser.ruta[0]);
+                }else{
+                    //No ha podido obtener una ruta, 0 pasos encontrados.
+                    console.log('No ha podido obtener una ruta, 0 pasos encontrados.')
+                }
+            }
+        }
+
+
         function darPasoDireccion(ser, direccion){
             let vel = (db.config.tamCasilla/4)/db.config.tamCasilla;
-
+            
             if(ran(0, db.tabla[posToId( db.seres[ser.id].posIntermedia )].penalizacionMov) < ser.velocidad ||
             ran(0,10)>7){//velocidad minima
             
+            db.seres[ser.id].agotamiento += 1;
+
             switch (direccion) {
                 case 1:
                     ser.pos[1] -= vel;
