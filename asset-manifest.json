@@ -1,0 +1,17 @@
+{
+  "main.css": "http//oscarestudioskr.github.io/PixelPlanet/static/css/main.30d09a53.chunk.css",
+  "main.js": "http//oscarestudioskr.github.io/PixelPlanet/static/js/main.2a3fef00.chunk.js",
+  "main.js.map": "http//oscarestudioskr.github.io/PixelPlanet/static/js/main.2a3fef00.chunk.js.map",
+  "runtime~main.js": "http//oscarestudioskr.github.io/PixelPlanet/static/js/runtime~main.3bb5d33c.js",
+  "runtime~main.js.map": "http//oscarestudioskr.github.io/PixelPlanet/static/js/runtime~main.3bb5d33c.js.map",
+  "static/js/2.11e5e5ce.chunk.js": "http//oscarestudioskr.github.io/PixelPlanet/static/js/2.11e5e5ce.chunk.js",
+  "static/js/2.11e5e5ce.chunk.js.map": "http//oscarestudioskr.github.io/PixelPlanet/static/js/2.11e5e5ce.chunk.js.map",
+  "index.html": "http//oscarestudioskr.github.io/PixelPlanet/index.html",
+  "precache-manifest.2a374502c7accaa7a83dc18ae206518e.js": "http//oscarestudioskr.github.io/PixelPlanet/precache-manifest.2a374502c7accaa7a83dc18ae206518e.js",
+  "service-worker.js": "http//oscarestudioskr.github.io/PixelPlanet/service-worker.js",
+  "static/css/main.30d09a53.chunk.css.map": "http//oscarestudioskr.github.io/PixelPlanet/static/css/main.30d09a53.chunk.css.map",
+  "static/media/Personajes01.png": "http//oscarestudioskr.github.io/PixelPlanet/static/media/Personajes01.0835a94b.png",
+  "static/media/SpritesTerreno01.jpg": "http//oscarestudioskr.github.io/PixelPlanet/static/media/SpritesTerreno01.ffc5ffb0.jpg",
+  "static/media/SpritesTerreno02.jpg": "http//oscarestudioskr.github.io/PixelPlanet/static/media/SpritesTerreno02.87139cf4.jpg",
+  "static/media/SpritesTerreno03.jpg": "http//oscarestudioskr.github.io/PixelPlanet/static/media/SpritesTerreno03.3e1f710f.jpg"
+}
