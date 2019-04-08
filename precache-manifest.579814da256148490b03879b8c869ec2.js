@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "097fcbf87ad1c564109d",
+    "revision": "8e07a696751115d156af",
     "url": "/PixelPlanet/static/css/main.30d09a53.chunk.css"
   },
   {
-    "revision": "097fcbf87ad1c564109d",
-    "url": "/PixelPlanet/static/js/main.f1e6ceaa.chunk.js"
+    "revision": "8e07a696751115d156af",
+    "url": "/PixelPlanet/static/js/main.40fda138.chunk.js"
   },
   {
     "revision": "73887c3ad8eb8f98a258",
@@ -32,7 +32,7 @@ self.__precacheManifest = [
     "url": "/PixelPlanet/static/media/Personajes01.0835a94b.png"
   },
   {
-    "revision": "1ecb4b1be6aa7df90a2c16e9c84e422f",
+    "revision": "af7248d72fad0f9dd5443163d64995e4",
     "url": "/PixelPlanet/index.html"
   }
 ];
