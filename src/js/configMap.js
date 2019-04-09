@@ -6,6 +6,7 @@ import spriteMapaSuelo03 from '../recurse/SpritesTerreno03.jpg';
 import personajes01 from '../recurse/Personajes01.png';
 
 
+
 export function crearTabla(){
 
     let i = 0;
@@ -60,8 +61,8 @@ function generarBioma(bioma){
             generarBloques( 'compacta', 20, 50, 20, 30, spriteMapaSuelo02, 'suelo');
             break;
         case 'Pradera':
-            generarBloques( 'repartida', 1, 100, 5, 10, spriteMapaSuelo02, 'arboledaVerde');
-            generarBloques( 'expansiva', 60, 150, 2, 4, spriteMapaSuelo02, 'arboledaVerde');
+            generarBloques( 'repartida', 3, 10, 5, 10, spriteMapaSuelo02, 'arboledaVerde');
+            generarBloques( 'expansiva', 5, 20, 2, 4, spriteMapaSuelo02, 'arboledaVerde');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
             generarBloques( 'expansiva',5, 10, 1, 3, spriteMapaSuelo02, 'agrupacion');
@@ -71,8 +72,8 @@ function generarBioma(bioma){
             break;
         case 'Bosque':
             generarBloques( 'compacta', 50, 150, 3, 8, spriteMapaSuelo03, 'interior');
-            generarBloques( 'expansiva', 400, 800, 2, 4, spriteMapaSuelo03, 'interior');
-            generarBloques( 'repartida', 20, 50, 2, 4, spriteMapaSuelo03, 'interior');
+            generarBloques( 'expansiva', 400, 1000, 3, 5, spriteMapaSuelo03, 'interior');
+            generarBloques( 'repartida', 20, 50, 3, 6, spriteMapaSuelo03, 'interior');
             break;
         default:
             break;
@@ -231,7 +232,6 @@ export function recalcularImagenes(el){
 
   
             }
-
 
 
 export function crearSer(idPos){

@@ -3,8 +3,11 @@ import { db } from './db.js';
 import '../css/seresIA.css';
 import { obtenerRuta} from './algoritmoAEstrella.js';
 import { idToPos, posToId, direccionMirada, ran, distAB} from './tabla.js';
-import { isNullOrUndefined } from 'util';
 
+import spriteMapaSuelo01 from '../recurse/SpritesTerreno01.jpg';
+import spriteMapaSuelo02 from '../recurse/SpritesTerreno02.jpg';
+import spriteMapaSuelo03 from '../recurse/SpritesTerreno03.jpg';
+import personajes01 from '../recurse/Personajes01.png';
 
 
 export class DibujarSeres extends Component {
@@ -264,8 +267,12 @@ export class DibujarSeres extends Component {
     cambioImagenAccion(ser){
         let x = 0;
         let y = 0;
-        if(ser.estado === 'Agotado'){ x = 400;
-        }else if(ser.estado === 'Dormido'){ x = 800;
+        let propor = (200*db.config.tamCasilla)/40;
+        let suelo = db.tabla[posToId(ser.posIntermedia)];
+        if(suelo != null && suelo.imgSuelo === spriteMapaSuelo02 && suelo.posImg[1] <= 600 &&  suelo.posImg[1] > 0){
+            y= propor*3;      
+        }else if(ser.estado === 'Agotado'){ x= propor*1;
+        }else if(ser.estado === 'Dormido'){ x= propor*2;
         }
         return x+'px '+y+'px';;
     }

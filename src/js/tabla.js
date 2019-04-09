@@ -65,3 +65,7 @@ export function direccionMirada(idOrigen, idDestino){
     }
     return 0;
 }
+
+export function tipoCasilla(idCasilla){
+
+}

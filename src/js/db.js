@@ -2,7 +2,7 @@
 export var db = 
 {
   'config':{
-    'numCasillas': 80,
+    'numCasillas': 50,
     'tamCasilla': 80,
     'vista': '',  //VerPenalizacion - VerObstaculo - verIdCasillas
     'tablaVacia': {
