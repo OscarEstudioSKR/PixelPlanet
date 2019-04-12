@@ -234,15 +234,14 @@ export function recalcularImagenes(el){
             }
 
 
-export function crearSer(idPos){
+export function crearSer(idPos, raza, sexo, familia){
     
     db.seres.push(
         {
             'id': db.seres.length,
             'nombre': db.config.listaNombresF[ ran(0,  db.config.listaNombresF.length-1) ],
-            'tipo': 'criatura',
             'pos': idToPos(idPos),
-            'dest': idToPos(35),
+            'dest': idToPos(ran(0,(db.config.numCasillas*db.config.numCasillas)-1)),
             'ruta': [],
             'posIntermedia': idToPos(idPos),
             'velocidad': ran(1,10),
@@ -250,19 +249,26 @@ export function crearSer(idPos){
             'img': personajes01,
             'estado': "",
             'accion': "",
-            'tareaCalculada': false,
-            'memoriaActiva': {},
-            'objetivoEnMarcha': false,
-            'necesidad': {},
-            'necesidadActivada': false,
-            'tiempoAccion': 0,
-
-            'inteligencia': ran(7,20),
-            'memoria': [db.listaMemorias[0]],
+            'inteligencia': ran(7,20),   
             'agotamiento': ran(5,100),
             'sed': ran(5,70),
             'hambre': ran(5,70),
             'salud': ran(5,70),
+
+            'sexo': sexo,
+            'raza': raza,
+            'familia': familia,
+            'habilidades': ['Supervivencia básica'],
+            'hogar': ran(0,(db.config.numCasillas*db.config.numCasillas)-1),
+            'reproduccion': {},
         }
     )
+    if(raza === 'Pixeliano'){
+        db.seres[db.seres.length-1].reproduccion = {
+            'tipoReproduccion': 'Vivipara',
+            'cicloReproduccion': 360,
+            'sexoEmbarazo': 'Hembra',
+        }
+    }
+
 }

@@ -4,6 +4,8 @@ import { db } from './js/db.js';
 import { crearTabla, generarPlaca, crearSer, recalcularImagenes } from './js/configMap.js';
 import { DibujarSeres } from './js/seresIA.js';
 import DibujarMapa from './js/mapa.js';
+import MenuSer from './js/MenuSer.js';
+
 
 //import { ran } from './js/tabla.js';
 
@@ -13,9 +15,9 @@ import DibujarMapa from './js/mapa.js';
   crearTabla();
   db.tabla.map( obj => recalcularImagenes(obj) );
 
-  crearSer(0);
-  for(let i = 1; i< 7; i++){
-    crearSer(i);
+  crearSer(0, 'Pixeliano', 'Hembra', 'Halem');
+  for(let i = 1; i< 5; i++){
+    crearSer(i,'Pixeliano', 'Hembra', 'Olgran');
   }
   
     
@@ -74,6 +76,8 @@ class App extends Component {
     super(props);
     this.state = {
       'tamCasilla': db.config.tamCasilla,
+      'menuPersonajes': -1,
+      'cambiarMenu': (id)=>{this.setState({'menuPersonajes': id,})},
     }
   }
 
@@ -88,9 +92,13 @@ class App extends Component {
         
         {
           db.seres.map((ser, i)=>{
-            return <DibujarSeres db={db} ser={ser} key={ser+'-'+i}/>
+            return <DibujarSeres db = {db} ser ={ser} key={ser+'-'+i} state = {this.state}/>
           })
         } 
+        {
+          this.state.menuPersonajes != -1 &&
+          <MenuSer ser={db.seres[this.state.menuPersonajes]} state = {this.state}/>
+        }
       </div>
     );
   }

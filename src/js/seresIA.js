@@ -19,149 +19,26 @@ export class DibujarSeres extends Component {
             'tam': db.config.tamCasilla,
             'vivido': 0,
             'posIntermedia': this.props.ser.posIntermedia,
-        }
-
-
-        //Calcula cual es la mejor valoración de una array de memorias
-        function mejorValoracion(arr, dest){
-            let calcular = (obj, mem)=>{ return (obj.especifica + mem.satisfaccionGeneral + distAB( obj.idPos , posToId( dest )))/3;};         
-            let memFinal = {
-                'id': 0,
-                'mejorIdEspecifica': 0,
-                'valorFinal': 0,
-            }
-            arr.map((mem)=>{
-                mem.satisfaccionEspecifica.map((obj)=>{
-                    if( calcular( obj, mem) > memFinal.valorFinal ){
-                        memFinal = {
-                            'id': mem.id,
-                            'mejorIdEspecifica': obj.id,
-                            'valorFinal': calcular( obj, mem ),
-                        }
-                    }
-                });
-            });
-            return memFinal;
+            'setStatePadre': ()=>{this.props.state.cambiarMenu(this.props.ser.id)},
         }
 
 
         function init(state){
             let ser = db.seres[state.id];
-            let comprobarNecesidades = [];
-            let listaMemoriasCompatibles = [];
-            let memFinal = {};
-
-            //NO TIENE NECESIDADES ACTIVAS
-            if(ser.necesidadActivada === false){
-
-                console.log('Comprobando necesidades');
-                comprobarNecesidades = db.listaNecesidades.filter((necesidad)=>{ return necesidad.requisito(ser); })
-    
-                //Si tiene necesidades
-                if( comprobarNecesidades.length > 0){
-                    console.log('Necesidad detectada '+comprobarNecesidades[0].estado);
-                    db.seres[state.id].estado = comprobarNecesidades[0].estado;
-    
-                    //Ha CALCULADO UNA SOLUCIÓN
-                    if(ser.tareaCalculada === false){
-                        //NO, NO LO HA CALCULADO AUN
-                        console.log('Calculando tarea...');
-                        
-                        //Bloquear siguiente paso
-                        db.seres[state.id].objetivoEnMarcha = false;
-    
-                        //Calcula si tiene en memoria una solución
-                        listaMemoriasCompatibles = ser.memoria.filter((memCal)=>{ return memCal.detonante === ser.estado;});
-                        if( listaMemoriasCompatibles.length > 0){
-    
-                            //Si, tiene una solución
-                            memFinal = mejorValoracion(listaMemoriasCompatibles, ser.dest);
-    
-                            //La solución es satisfactoria?
-                            if( memFinal.valorFinal > 0 ){
-    
-                                //Si, es una solución váida.
-                                db.seres[state.id].memoriActiva = memFinal;
-                                db.seres[state.id].tareaCalculada = true;
-                                db.seres[state.id].objetivoEnMarcha = true;
-                                db.seres[state.id].necesidad = db.listaNecesidades.filter((necesidad)=>{ return necesidad.requisito(ser)})[0];
-                                db.seres[state.id].estado = ser.necesidad.estado;
-                                db.seres[state.id].accion = ser.necesidad.accion;
-                                console.log('Sabe que hacer '+ser.estado);
-                                db.seres[state.id].necesidadActivada = true;
-    
-                                //La solución encontrada no es satisfactoria
-                            }else{
-                                console.log('La solución encontrada no es satisfactoria');
-                            }
-    
-                            //No tiene una solución
-                        }else{
-                            console.log('No conoce una solución');
-                            //db.seres[state.id].estado = 'Explorando';
-                        }
-    
-                        //SI, YA A CALCULADO UNA SOLUCIÓN
-                    }else{
-                        console.log('Tarea calculada con exito!');
-                    }
-    
-                //No tiene necesidades
-                }else{
-                    console.log('No tiene necesidades');
-                    db.seres[state.id].dest = idToPos(ran(0,500));
-                    db.seres[state.id].objetivoEnMarcha = true;
-                }
-            }else{
-                //tIENE ACTIVADA LA NECESIDAD
-
-            }
-           
+            
 
             //TIENE YA UN OBJETIVO
-            if(ser.objetivoEnMarcha === true){
+            if(ser.dest != ser.pos){
 
                 
                 //Si no está en su destino se mueve hacia el
                 if( posToId(ser.pos) !== posToId(ser.dest) ){
-                    console.log('Moviendose...');
+                    //console.log('Moviendose...');
                     moverse(ser); 
 
                 //Una vez llega a su destino    
                 }else{
-                    //HAY UN TIEMPO DE ACCIÓN DE LA TAREA EN MARCHA?
-                    if(db.seres[state.id].tiempoAccion > 0){
-                        console.log('Tick-tack: '+ser.tiempoAccion);
-                        db.seres[state.id].tiempoAccion --;
-
-                        //TIEMPO CUMPLIDO - CUMPLE LA ACCION Y CAMIBA A ESTADO NORMAL
-                        if(db.seres[state.id].tiempoAccion === 0){
-                            console.log(' y fin');
-                            //Falta valorar si el lugar ha ofrecido lo que prometia
-            
-                            db.seres[state.id].objetivoEnMarcha = false;
-                            db.seres[state.id].tareaCalculada = false;
-                            db.seres[state.id].ruta = [];
-                            db.seres[state.id].estado = '';
-                            db.seres[state.id].accion = '';
-                            db.seres[state.id].necesidad = {};
-                            db.seres[state.id].necesidadActivada = false;
-                        }
-                    
-                    //NO HAY TIEMPO DE ACCIÓN PERO SI UNA NECESIDAD QUE LO ACTIVA
-                    }else if(ser.necesidadActivada){
-                        
-                        ser.memoria[ser.memoriActiva.id].obtiene(ser);
-                        db.seres[state.id].estado = ser.necesidad.efecto;
-                        db.seres[state.id].tiempoAccion = ser.necesidad.tiempoAccion;
-                        db.seres[state.id].ruta = [];
-                        db.seres[state.id].necesidad = {};
-                        console.log(ser.nombre+ ' ha llegado a su destino '+ posToId(ser.dest)+ ' y esta '+ ser.estado);
-                    }
-                    else{
-                        //RUTA ALCANZADA Y SIN NECESIDADES DE ACCIÓN
-                        db.seres[state.id].tiempoAccion = ran(1,50);
-                    }
+                    //console.log('Ha llegado a su destino');
                 }            
             }
         }
@@ -169,7 +46,7 @@ export class DibujarSeres extends Component {
 
 
         function moverse(ser){
-            console.log('Moviendo...');
+            //console.log('Moviendo...');
 
             if(ser.ruta.length > 0 ){              
                 //Si no esta en el paso intermedio va a el
@@ -196,13 +73,13 @@ export class DibujarSeres extends Component {
             //NO HAY RUTA    
             }else{
                 //AÑADE UNA NUEVA RUTA HACIA EL DESTINO
-                console.log(ser.nombre+' Buscando una nueva ruta a '+posToId(ser.dest));
+                //console.log(ser.nombre+' Buscando una nueva ruta a '+posToId(ser.dest));
                 ser.ruta = obtenerRuta(ser, ser.pos, ser.dest);
                 if(ser.ruta.length > 0 ){
                     ser.posIntermedia = idToPos(ser.ruta[0]);
                 }else{
                     //No ha podido obtener una ruta, 0 pasos encontrados.
-                    console.log('No ha podido obtener una ruta, 0 pasos encontrados.')
+                    //console.log('No ha podido obtener una ruta, 0 pasos encontrados.')
                 }
             }
         }
@@ -294,7 +171,7 @@ export class DibujarSeres extends Component {
 
 
         return (
-            <div style={styleSer} className="Seres">
+            <a style={styleSer} className="Seres" onClick={(event)=>this.state.setStatePadre()}>
                 
                 {/*
                     ser.ruta.map((pos, i)=>{
@@ -310,7 +187,7 @@ export class DibujarSeres extends Component {
                     }})
                 */}
                 
-            </div>
+            </a>
         )
     }
   }
