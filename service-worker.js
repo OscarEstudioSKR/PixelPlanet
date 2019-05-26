@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/PixelPlanet/precache-manifest.579814da256148490b03879b8c869ec2.js"
+  "/PixelPlanet/precache-manifest.72f5e043c62058cf7254abf9fd34c1eb.js"
 );
 
 workbox.clientsClaim();
